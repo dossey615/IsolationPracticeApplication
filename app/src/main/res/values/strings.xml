@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">IsolationAssist</string>
+    <string name="app_select">SelectParts</string>
+    <string name="app_description">DescriotionSet</string>
+    <string name="use">使い方</string>
+    <string name="start">アイソレーション測定開始</string>
+    <string name="image">TODO</string>
+    <string name="parts1">首</string>
+    <string name="parts2">胸</string>
+    <string name="parts3">腰</string>
+    <string name="selectedParts">練習部位：</string>
+    <!--<string-array name=”sample_array”>-->
+    <!--<item>５秒</item>-->
+    <!--<item>10秒</item>-->
+    <!--<item>15秒</item>-->
+    <!--</string-array>-->
+</resources>
