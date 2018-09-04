@@ -9,9 +9,9 @@
     <string name="parts2">胸</string>
     <string name="parts3">腰</string>
     <string name="selectedParts">練習部位：</string>
-    <!--<string-array name=”sample_array”>-->
-    <!--<item>５秒</item>-->
-    <!--<item>10秒</item>-->
-    <!--<item>15秒</item>-->
-    <!--</string-array>-->
+    <string-array name="time_array">
+    <item value = "5">５秒</item>
+    <item value = "10">10秒</item>
+    <item value = "15">15秒</item>
+    </string-array>
 </resources>
