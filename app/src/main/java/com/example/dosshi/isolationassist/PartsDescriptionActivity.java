@@ -16,8 +16,22 @@ public class PartsDescriptionActivity extends AppCompatActivity {
         String data = intent.getStringExtra(SelectPartsActivity.PARTS_DATA);
         TextView textView = findViewById(R.id.SelectedParts);
         textView.setText(data);
+        Button stbutton = findViewById(R.id.start_assist);
         initSpinners();
+        startButton(stbutton);
     }
+
+
+
+    private void startButton(Button button) {
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplication(), PracticeActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
 
     private void initSpinners() {
         Spinner spinner1 = (Spinner)findViewById(R.id.Spinner01);

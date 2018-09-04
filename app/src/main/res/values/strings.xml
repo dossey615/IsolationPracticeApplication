@@ -10,8 +10,8 @@
     <string name="parts3">腰</string>
     <string name="selectedParts">練習部位：</string>
     <string-array name="time_array">
-    <item value = "5">５秒</item>
-    <item value = "10">10秒</item>
-    <item value = "15">15秒</item>
+        <item value="5">５秒</item>
+        <item value="10">10秒</item>
+        <item value="15">15秒</item>
     </string-array>
 </resources>

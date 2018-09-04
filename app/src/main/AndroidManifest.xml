@@ -24,7 +24,7 @@
         <activity
             android:name=".PartsDescriptionActivity"
             android:label="@string/app_description" />
-
+        <activity android:name=".PracticeActivity"></activity>
     </application>
 
 </manifest>
