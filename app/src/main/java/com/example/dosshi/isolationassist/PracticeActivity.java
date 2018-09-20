@@ -1,32 +1,100 @@
 package com.example.dosshi.isolationassist;
 
 import java.util.*;
+
+import android.content.Context;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import java.text.SimpleDateFormat;
-
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.view.View;
 import android.widget.*;
 import android.os.Bundle;
+import android.os.Vibrator;
 
-public class PracticeActivity extends AppCompatActivity {
+public class PracticeActivity extends AppCompatActivity implements SensorEventListener{
     private TextView timerText;
+    private TextView prTimeText;
+    private TextView accelText;
+    private int flag = 0;
+
+    private Vibrator vibrator;
     private CountDown countDown;
+    private SensorManager sensorManager;
+    private Sensor accel;
 
     private SimpleDateFormat dataFormat =
             new SimpleDateFormat("s", Locale.US);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_practice);
+
         timerText = findViewById(R.id.count);
+        prTimeText = findViewById(R.id.timeView);
+        accelText = findViewById(R.id.textView3);
+        vibrator = (Vibrator)getSystemService(VIBRATOR_SERVICE);
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        accel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
         long countNumber = 4000;
         long interval = 10;
+        prTimeText.setVisibility(View.INVISIBLE);
         countDown = new CountDown(countNumber, interval);
         countDown.start();
 
     }
+    /*--以下は加速度センサーの実装--*/
+
+    @Override
+    protected void onResume() {
+            super.onResume();
+            // Listenerの登録
+            accel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+            sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    // 解除するコードも入れる!
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Listenerを解除
+        sensorManager.unregisterListener(this);
+    }
+
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+
+        float sensorX, sensorY, sensorZ;
+
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER && flag == 1) {
+            sensorX = event.values[0];
+            sensorY = event.values[1];
+            sensorZ = event.values[2];
+
+            if(sensorX > 8 || sensorZ > 4 ) vibrator.vibrate(100);
+            else vibrator.cancel();
+
+            String strTmp = "加速度センサー\n"
+                    + " X: " + sensorX + "\n"
+                    + " Y: " + sensorY + "\n"
+                    + " Z: " + sensorZ;
+            accelText.setText(strTmp);
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
+    /*--以下はタイマーメソッドの実装--*/
 
     class CountDown extends CountDownTimer {
 
@@ -39,6 +107,9 @@ public class PracticeActivity extends AppCompatActivity {
             // 完了
             timerText.setTextSize(60);
             timerText.setText("計測中・・・");
+            prTimeText.setVisibility(View.VISIBLE);
+            flag = 1;
+
         }
 
         @Override
@@ -48,7 +119,7 @@ public class PracticeActivity extends AppCompatActivity {
             if(Integer.parseInt(dataFormat.format(millisUntilFinished)) > 0) {
                 timerText.setText(dataFormat.format(millisUntilFinished));
             }else if(Integer.parseInt(dataFormat.format(millisUntilFinished)) == 0) {
-                timerText.setText("Start");
+                timerText.setText("start");
             }else{
                 timerText.setVisibility(View.INVISIBLE);
                 countDown.cancel();

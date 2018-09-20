@@ -8,6 +8,9 @@ import android.view.*;
 
 public class PartsDescriptionActivity extends AppCompatActivity {
 
+    public static String PRACTICE_TIME;
+    private String time;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +30,7 @@ public class PartsDescriptionActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplication(), PracticeActivity.class);
+                intent.putExtra(PRACTICE_TIME,"a");
                 startActivity(intent);
             }
         });
