@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.dosshi.isolationassist">
-    <uses-permission android:name="android.permission.VIBRATE"/>
+
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -11,8 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:screenOrientation="portrait"
             android:name=".MainReaearchActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,17 +22,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:screenOrientation="portrait"
             android:name=".SelectPartsActivity"
-            android:label="@string/app_select" />
+            android:label="@string/app_select"
+            android:screenOrientation="portrait" />
         <activity
-            android:screenOrientation="portrait"
             android:name=".PartsDescriptionActivity"
-            android:label="@string/app_description" />
+            android:label="@string/app_description"
+            android:screenOrientation="portrait" />
         <activity
-            android:screenOrientation="portrait"
             android:name=".PracticeActivity"
-            android:label="PracticeActivity" />
+            android:label="PracticeActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ResultActivity"></activity>
     </application>
 
 </manifest>

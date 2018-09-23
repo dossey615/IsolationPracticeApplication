@@ -12,9 +12,29 @@
     <string name="count">3</string>
     <string name="_3">3</string>
     <string name="count_3">3</string>
-    <string-array name="time_array">
-        <item value="5">５秒</item>
-        <item value="10">10秒</item>
-        <item value="15">15秒</item>
-    </string-array>
+
+    <!--<string-array name="sort_spinner_item1">-->
+        <!--<item name="key">５秒</item>-->
+        <!--<item name="value">5000</item>-->
+    <!--</string-array>-->
+    <!--<string-array name="sort_spinner_item2">-->
+        <!--<item name="key">10秒</item>-->
+        <!--<item name="value">100000</item>-->
+    <!--</string-array>-->
+    <!--<string-array name="sort_spinner_item3">-->
+        <!--<item name="key">15秒</item>-->
+        <!--<item name="value">150000</item>-->
+    <!--</string-array>-->
+
+    <!--<array name="time_array">-->
+        <!--<item>@array/sort_spinner_item1</item>-->
+        <!--<item>@array/sort_spinner_item2</item>-->
+        <!--<item>@array/sort_spinner_item3</item>-->
+    <!--</array>-->
+
+    <array name="time_array">
+        <item>５秒</item>
+        <item>５秒</item>
+        <item>５秒</item>
+    </array>
 </resources>

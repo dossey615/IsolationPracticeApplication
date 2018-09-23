@@ -3,6 +3,7 @@ package com.example.dosshi.isolationassist;
 import java.util.*;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import java.text.SimpleDateFormat;
@@ -105,21 +106,32 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
         @Override
         public void onFinish() {
             // 完了
-            timerText.setTextSize(60);
-            timerText.setText("計測中・・・");
-            prTimeText.setVisibility(View.VISIBLE);
-            flag = 1;
-
+            if (flag == 0){
+                prTimeText.setVisibility(View.VISIBLE);
+                timerText.setTextSize(60);
+                timerText.setText("計測中・・・");
+                countDown = new CountDown(5000, 10);
+                countDown.start();
+                flag = 1;
+            } else {
+                Intent intent = new Intent(getApplication(), ResultActivity.class);
+                startActivity(intent);
+            }
         }
 
         @Override
         public void onTick(long millisUntilFinished) {
             // 残り時間を分、秒、ミリ秒に分割
             String cou = dataFormat.format(millisUntilFinished);
-            if(Integer.parseInt(dataFormat.format(millisUntilFinished)) > 0) {
+            if(Integer.parseInt(dataFormat.format(millisUntilFinished)) > 0 && flag == 0) {
                 timerText.setText(dataFormat.format(millisUntilFinished));
-            }else if(Integer.parseInt(dataFormat.format(millisUntilFinished)) == 0) {
+            }else if(Integer.parseInt(dataFormat.format(millisUntilFinished)) > 0){
+                prTimeText.setText(dataFormat.format(millisUntilFinished));
+            }else if(Integer.parseInt(dataFormat.format(millisUntilFinished)) == 0 && flag == 0) {
                 timerText.setText("start");
+            }else if(Integer.parseInt(dataFormat.format(millisUntilFinished)) == 0) {
+                timerText.setText("finish");
+                prTimeText.setVisibility(View.INVISIBLE);
             }else{
                 timerText.setVisibility(View.INVISIBLE);
                 countDown.cancel();
