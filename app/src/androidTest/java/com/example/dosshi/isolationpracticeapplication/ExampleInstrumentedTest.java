@@ -1,4 +1,4 @@
-package com.example.dosshi.isolationassist;
+package com.example.dosshi.isolationpracticeapplication;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

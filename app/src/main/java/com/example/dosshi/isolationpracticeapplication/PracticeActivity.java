@@ -1,4 +1,4 @@
-package com.example.dosshi.isolationassist;
+package com.example.dosshi.isolationpracticeapplication;
 
 import java.util.*;
 
@@ -27,6 +27,9 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
     private SensorManager sensorManager;
     private Sensor accel;
 
+
+    private SimpleDateFormat timeFormat =
+            new SimpleDateFormat("mm:ss.SSS", Locale.US);
     private SimpleDateFormat dataFormat =
             new SimpleDateFormat("s", Locale.US);
 
@@ -114,6 +117,8 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
                 countDown.start();
                 flag = 1;
             } else {
+                timerText.setText("finish");
+                timerText.setVisibility(View.INVISIBLE);
                 Intent intent = new Intent(getApplication(), ResultActivity.class);
                 startActivity(intent);
             }
@@ -126,15 +131,11 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
             if(Integer.parseInt(dataFormat.format(millisUntilFinished)) > 0 && flag == 0) {
                 timerText.setText(dataFormat.format(millisUntilFinished));
             }else if(Integer.parseInt(dataFormat.format(millisUntilFinished)) > 0){
-                prTimeText.setText(dataFormat.format(millisUntilFinished));
+                prTimeText.setText(timeFormat.format(millisUntilFinished));
             }else if(Integer.parseInt(dataFormat.format(millisUntilFinished)) == 0 && flag == 0) {
                 timerText.setText("start");
-            }else if(Integer.parseInt(dataFormat.format(millisUntilFinished)) == 0) {
-                timerText.setText("finish");
-                prTimeText.setVisibility(View.INVISIBLE);
             }else{
-                timerText.setVisibility(View.INVISIBLE);
-                countDown.cancel();
+                prTimeText.setText(timeFormat.format(millisUntilFinished));
             }
         }
     }

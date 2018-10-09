@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.dosshi.isolationassist">
+    package="com.example.dosshi.isolationpracticeapplication">
 
     <uses-permission android:name="android.permission.VIBRATE" />
 
@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainReaearchActivity"
+            android:name="com.example.dosshi.isolationpracticeapplication.MainReaearchActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
             <intent-filter>
@@ -22,18 +22,21 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SelectPartsActivity"
+            android:name="com.example.dosshi.isolationpracticeapplication.SelectPartsActivity"
             android:label="@string/app_select"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".PartsDescriptionActivity"
+            android:name="com.example.dosshi.isolationpracticeapplication.PartsDescriptionActivity"
             android:label="@string/app_description"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".PracticeActivity"
+            android:name="com.example.dosshi.isolationpracticeapplication.PracticeActivity"
             android:label="PracticeActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ResultActivity"></activity>
+        <activity
+            android:name="com.example.dosshi.isolationpracticeapplication.ResultActivity"
+            android:label="ResultData"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

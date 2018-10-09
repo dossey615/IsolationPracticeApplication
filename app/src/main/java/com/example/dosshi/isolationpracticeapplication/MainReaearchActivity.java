@@ -1,4 +1,4 @@
-package com.example.dosshi.isolationassist;
+package com.example.dosshi.isolationpracticeapplication;
 
 import android.support.v7.app.AppCompatActivity;
 import android.content.Intent;
