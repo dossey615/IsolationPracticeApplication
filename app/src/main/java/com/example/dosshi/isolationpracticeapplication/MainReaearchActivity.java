@@ -28,6 +28,9 @@ public class MainReaearchActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
+
     }
 }
 

@@ -20,12 +20,14 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
     private TextView timerText;
     private TextView prTimeText;
     private TextView accelText;
+    private TextView gyroText;
     private int flag = 0;
 
     private Vibrator vibrator;
     private CountDown countDown;
     private SensorManager sensorManager;
     private Sensor accel;
+    private Sensor gyro;
 
 
     private SimpleDateFormat timeFormat =
@@ -39,13 +41,19 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_practice);
 
+        //テキストのidを取得し、連携
         timerText = findViewById(R.id.count);
         prTimeText = findViewById(R.id.timeView);
-        accelText = findViewById(R.id.textView3);
+        accelText = findViewById(R.id.accel);
+        gyroText = findViewById(R.id.gyroscope);
+
+        //加速度用のプログラム実装
         vibrator = (Vibrator)getSystemService(VIBRATOR_SERVICE);
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        accel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+//        accel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+//        gyro = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
 
+        //タイマーの初期設定
         long countNumber = 4000;
         long interval = 10;
         prTimeText.setVisibility(View.INVISIBLE);
@@ -60,7 +68,10 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
             super.onResume();
             // Listenerの登録
             accel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+            gyro = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
             sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_NORMAL);
+            sensorManager.registerListener(this, gyro, SensorManager.SENSOR_DELAY_NORMAL);
+
     }
 
     // 解除するコードも入れる!
@@ -76,20 +87,33 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
     public void onSensorChanged(SensorEvent event) {
 
         float sensorX, sensorY, sensorZ;
+        float gyroX, gyroY, gyroZ;
+        if(flag == 1){
+            switch (event.sensor.getType()){
+                case Sensor.TYPE_ACCELEROMETER:
+                sensorX = event.values[0];
+                sensorY = event.values[1];
+                sensorZ = event.values[2];
+                    if(sensorX > 8 || sensorZ > 4 ) vibrator.vibrate(100);
+                    else vibrator.cancel();
+                    String strTmp = "加速度センサー\n"
+                            + " X: " + sensorX + "\n"
+                            + " Y: " + sensorY + "\n"
+                            + " Z: " + sensorZ;
+                    accelText.setText(strTmp);
+                break;
 
-        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER && flag == 1) {
-            sensorX = event.values[0];
-            sensorY = event.values[1];
-            sensorZ = event.values[2];
-
-            if(sensorX > 8 || sensorZ > 4 ) vibrator.vibrate(100);
-            else vibrator.cancel();
-
-            String strTmp = "加速度センサー\n"
-                    + " X: " + sensorX + "\n"
-                    + " Y: " + sensorY + "\n"
-                    + " Z: " + sensorZ;
-            accelText.setText(strTmp);
+                case Sensor.TYPE_GYROSCOPE:
+                gyroX = event.values[0];
+                gyroY = event.values[1];
+                gyroZ = event.values[2];
+                    String gyroTmp = "ジャイロセンサー\n"
+                            + " X: " + gyroX + "\n"
+                            + " Y: " + gyroY + "\n"
+                            + " Z: " + gyroZ;
+                    gyroText.setText(gyroTmp);
+                break;
+            }
         }
     }
 
