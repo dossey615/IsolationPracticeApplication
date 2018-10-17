@@ -15,7 +15,7 @@
         android:contentDescription="TODO"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/dancer" />
+        app:srcCompat="@drawable/dancer_img" />
 
     <Button
         android:id="@+id/practiceAdvice"
