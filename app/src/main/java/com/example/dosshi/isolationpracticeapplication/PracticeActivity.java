@@ -30,6 +30,7 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
     private GoogleApiClient mGoogleApiClient;
     public static String PARTS_NAME;
     private int flag = 0;
+    private Globals globals;
 
     private TextView timerText;
     private TextView prTimeText;
@@ -42,8 +43,6 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
     private SensorManager sensorManager;
     private Sensor accel;
     private Sensor gyro;
-    private String data;
-
 
     private SimpleDateFormat timeFormat =
             new SimpleDateFormat("mm:ss.SSS", Locale.US);
@@ -55,16 +54,14 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_practice);
+        //グローバル変数を取得
+        globals = (Globals) this.getApplication();
 
         //テキストのidを取得し、連携
         timerText = findViewById(R.id.count);
         prTimeText = findViewById(R.id.timeView);
         accelText = findViewById(R.id.accel);
         gyroText = findViewById(R.id.gyroscope);
-
-        //別の画面からデータを受け取る
-        Intent intent = getIntent();
-        data = intent.getStringExtra(PartsDescriptionActivity.PARTS_NAME);
 
         //加速度用のプログラム実装
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
@@ -115,6 +112,7 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
     @Override
     protected void onPause() {
         super.onPause();
+        countDown.cancel();
         // Listenerを解除
         sensorManager.unregisterListener(this);
     }
@@ -187,7 +185,7 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
         @Override
         public void onFinish() {
             // 完了
-            if (flag == 0){
+            if (flag == 0) {
                 prTimeText.setVisibility(View.VISIBLE);
                 timerText.setTextSize(60);
                 timerText.setText("計測中・・・");
@@ -197,8 +195,8 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
             } else {
                 timerText.setText("finish");
                 timerText.setVisibility(View.INVISIBLE);
+                globals.watchDataSet(watchResult);
                 Intent intent = new Intent(getApplication(), ResultActivity.class);
-                intent.putExtra(PARTS_NAME,data);
                 startActivity(intent);
             }
         }

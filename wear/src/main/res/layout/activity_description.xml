@@ -19,7 +19,7 @@
             android:layout_height="83dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="16dp"
-            android:text="アプリの指示に従って\nスマートウォッチを\n装着してください\n準備ができたらスイッチをオンにしてください。"
+            android:text="@string/descriptiontext"
             android:textColor="@color/black"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -27,16 +27,15 @@
 
         <Switch
             android:id="@+id/okswitch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="49dp"
-            android:layout_marginBottom="35dp"
-            android:checked="false"
-            android:text="準備OK"
-            android:textColor="@color/green"
+            android:layout_width="147dp"
+            android:layout_height="61dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginBottom="27dp"
+            android:text="準備OK！"
+            android:textColor="@color/blue"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:checked="false" />
+            app:layout_constraintStart_toStartOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
 </android.support.wear.widget.BoxInsetLayout>
