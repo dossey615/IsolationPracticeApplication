@@ -1,33 +1,48 @@
 package com.example.dosshi.isolationpracticeapplication;
 
-import java.util.*;
-
 import android.content.Context;
 import android.content.Intent;
-import android.os.CountDownTimer;
-import android.support.v7.app.AppCompatActivity;
-import java.text.SimpleDateFormat;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.view.View;
-import android.widget.*;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Vibrator;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
-public class PracticeActivity extends AppCompatActivity implements SensorEventListener{
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.wearable.MessageApi;
+import com.google.android.gms.wearable.MessageEvent;
+import com.google.android.gms.wearable.Wearable;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Locale;
+
+public class PracticeActivity extends AppCompatActivity implements SensorEventListener, GoogleApiClient.ConnectionCallbacks, MessageApi.MessageListener {
+
+    private static final String TAG = PracticeActivity.class.getName();
+    private GoogleApiClient mGoogleApiClient;
+    public static String PARTS_NAME;
+    private int flag = 0;
+
     private TextView timerText;
     private TextView prTimeText;
     private TextView accelText;
     private TextView gyroText;
-    private int flag = 0;
 
+    private ArrayList watchResult = new ArrayList();
     private Vibrator vibrator;
     private CountDown countDown;
     private SensorManager sensorManager;
     private Sensor accel;
     private Sensor gyro;
+    private String data;
 
 
     private SimpleDateFormat timeFormat =
@@ -47,20 +62,42 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
         accelText = findViewById(R.id.accel);
         gyroText = findViewById(R.id.gyroscope);
 
+        //別の画面からデータを受け取る
+        Intent intent = getIntent();
+        data = intent.getStringExtra(PartsDescriptionActivity.PARTS_NAME);
+
         //加速度用のプログラム実装
-        vibrator = (Vibrator)getSystemService(VIBRATOR_SERVICE);
+        vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-//        accel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-//        gyro = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+
+        //GoogleApiClientインスタンス生成
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
+                    @Override
+                    public void onConnectionFailed(ConnectionResult connectionResult) {
+                        Log.d(TAG, "onConnectionFailed:" + connectionResult.toString());
+                    }
+                })
+                .addApi(Wearable.API)
+                .build();
 
         //タイマーの初期設定
         long countNumber = 4000;
         long interval = 10;
         prTimeText.setVisibility(View.INVISIBLE);
         countDown = new CountDown(countNumber, interval);
-        countDown.start();
-
     }
+
+    /*--アクティビティが表示された時--*/
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //GoogleApiClient接続
+        mGoogleApiClient.connect();
+        countDown.start();
+    }
+
     /*--以下は加速度センサーの実装--*/
 
     @Override
@@ -80,6 +117,29 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
         super.onPause();
         // Listenerを解除
         sensorManager.unregisterListener(this);
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        //GoogleApiClient 接続成功時に呼ばれます。
+        Log.d(TAG, "onConnected");
+        Wearable.MessageApi.addListener(mGoogleApiClient, this);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        //接続中断時に呼ばれます。
+        Log.d(TAG, "onConnectionSuspended");
+    }
+
+    @Override
+    public void onMessageReceived(MessageEvent messageEvent) {
+        watchResult.add(messageEvent.getPath());
     }
 
 
@@ -117,15 +177,9 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
         }
     }
 
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }
-
     /*--以下はタイマーメソッドの実装--*/
 
     class CountDown extends CountDownTimer {
-
         CountDown(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
         }
@@ -137,13 +191,14 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
                 prTimeText.setVisibility(View.VISIBLE);
                 timerText.setTextSize(60);
                 timerText.setText("計測中・・・");
-                countDown = new CountDown(5000, 10);
+                countDown = new CountDown(10000, 10);
                 countDown.start();
                 flag = 1;
             } else {
                 timerText.setText("finish");
                 timerText.setVisibility(View.INVISIBLE);
                 Intent intent = new Intent(getApplication(), ResultActivity.class);
+                intent.putExtra(PARTS_NAME,data);
                 startActivity(intent);
             }
         }

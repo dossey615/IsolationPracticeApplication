@@ -1,36 +1,51 @@
 package com.example.dosshi.isolationpracticeapplication;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.*;
-import android.view.*;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 public class PartsDescriptionActivity extends AppCompatActivity {
 
-    public static String PRACTICE_TIME;
+    public static String PARTS_NAME;
     private String time;
+    private String data;
+    private String name = "no";
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parts_description);
+
+        //別の画面からデータを受け取る
         Intent intent = getIntent();
-        String data = intent.getStringExtra(SelectPartsActivity.PARTS_DATA);
+       data = intent.getStringExtra(SelectPartsActivity.PARTS_DATA);
+
+        //選ばれた部分の表示
         TextView textView = findViewById(R.id.SelectedParts);
-        textView.setText(data);
+        if(data.equals("Chest"))name ="練習部位：胸";
+        if(data.equals("Neck"))name ="練習部位：首";
+        else name ="練習部位：腰";
+        textView.setText(name);
+
+        //時間のスピナー表示
         Button stbutton = findViewById(R.id.start_assist);
         initSpinners();
         startButton(stbutton);
     }
 
-
-
     private void startButton(Button button) {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplication(), PracticeActivity.class);
-                intent.putExtra(PRACTICE_TIME,"a");
+                intent.putExtra(PARTS_NAME,data);
                 startActivity(intent);
             }
         });

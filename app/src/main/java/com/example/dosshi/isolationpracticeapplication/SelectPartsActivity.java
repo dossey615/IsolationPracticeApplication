@@ -1,8 +1,8 @@
 package com.example.dosshi.isolationpracticeapplication;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
@@ -18,12 +18,11 @@ public class SelectPartsActivity extends AppCompatActivity {
         Button breastButton = findViewById(R.id.parts2);
         Button hipButton = findViewById(R.id.parts3);
 
-
         //それぞれのボタンを押した時の設定
         neckButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplication(), PartsDescriptionActivity.class);
-                String message = "練習部位：首";
+                String message = "Neck";
                 intent.putExtra(PARTS_DATA,message);
                 startActivity(intent);
             }
@@ -32,7 +31,7 @@ public class SelectPartsActivity extends AppCompatActivity {
         breastButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplication(), PartsDescriptionActivity.class);
-                String message = "練習部位：胸";
+                String message = "Chest";
                 intent.putExtra(PARTS_DATA,message);
                 startActivity(intent);
             }
@@ -41,11 +40,12 @@ public class SelectPartsActivity extends AppCompatActivity {
         hipButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplication(), PartsDescriptionActivity.class);
-                String message = "練習部位：腰";
+                String message = "Waist";
                 intent.putExtra(PARTS_DATA,message);
                 startActivity(intent);
             }
         });
 
     }
+
 }

@@ -1,12 +1,15 @@
 package com.example.dosshi.isolationpracticeapplication;
 
-import android.support.v7.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
-public class MainReaearchActivity extends AppCompatActivity {
+public class MainResearchActivity extends AppCompatActivity{
+
+    private TextView text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +23,6 @@ public class MainReaearchActivity extends AppCompatActivity {
         // スプラッシュthemeを通常themeに変更する
         setTheme(R.style.AppTheme);
         setContentView(R.layout.activity_main_reaearch);
-
         Button sendButton = findViewById(R.id.start);
         sendButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -28,9 +30,6 @@ public class MainReaearchActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
-
     }
 }
 
