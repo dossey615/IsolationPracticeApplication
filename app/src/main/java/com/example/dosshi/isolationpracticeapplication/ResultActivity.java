@@ -6,8 +6,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+
 public class ResultActivity extends AppCompatActivity {
 
+    private Globals globals;
+    private FirebaseDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,9 +22,15 @@ public class ResultActivity extends AppCompatActivity {
         //UIのデータを取得
         setContentView(R.layout.activity_result);
         Button title = findViewById(R.id.titleback);
+        globals = (Globals)this.getApplication();
 
+        database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("getReference");
+        myRef.setValue("Hello, World!");
 
-//        String filename =  data + "_test_1.csv";
+        fileUpload();
+
+//        String filename =  globals.slctParts + "_test.csv";
 //        String output = "サンプル";
 //        FileOutputStream outputStream;
 //        try {
@@ -38,4 +50,10 @@ public class ResultActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void fileUpload() {
+// Write a message to the database
+
+    }
+
 }

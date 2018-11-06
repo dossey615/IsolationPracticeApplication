@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "887675896466",
-    "firebase_url": "https://isolationassist.firebaseio.com",
-    "project_id": "isolationassist",
-    "storage_bucket": "isolationassist.appspot.com"
+    "project_number": "734479186196",
+    "firebase_url": "https://isolationpracticeapplica-d0934.firebaseio.com",
+    "project_id": "isolationpracticeapplica-d0934",
+    "storage_bucket": "isolationpracticeapplica-d0934.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:887675896466:android:7cc79c738d005b68",
+        "mobilesdk_app_id": "1:734479186196:android:9a0181b52c8ac444",
         "android_client_info": {
           "package_name": "com.example.dosshi.isolationpracticeapplication"
         }
       },
       "oauth_client": [
         {
-          "client_id": "887675896466-qc1hp5h0rt2nd9epd7lut1f2tidrbb41.apps.googleusercontent.com",
+          "client_id": "734479186196-pks5thk47nqfv0kbke77ar17pnsmkclt.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDFSFfT3lwYM2YAJedVNKBcx3QpwHtVs8o"
+          "current_key": "AIzaSyCw-v_ploBetZnIzXEm_-jgzYrYjWY4Wio"
         }
       ],
       "services": {
