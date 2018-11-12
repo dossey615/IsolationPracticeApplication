@@ -13,24 +13,27 @@
     <string name="_3">3</string>
     <string name="count_3">3</string>
     <string name="textview">TextView</string>
+    <string name="todo">TODO</string>
+    <string name="accel">加速度データ</string>
+    <string name="backtop">タイトルに戻る</string>
 
     <!--<string-array name="sort_spinner_item1">-->
-        <!--<item name="key">５秒</item>-->
-        <!--<item name="value">5000</item>-->
+    <!--<item name="key">５秒</item>-->
+    <!--<item name="value">5000</item>-->
     <!--</string-array>-->
     <!--<string-array name="sort_spinner_item2">-->
-        <!--<item name="key">10秒</item>-->
-        <!--<item name="value">100000</item>-->
+    <!--<item name="key">10秒</item>-->
+    <!--<item name="value">100000</item>-->
     <!--</string-array>-->
     <!--<string-array name="sort_spinner_item3">-->
-        <!--<item name="key">15秒</item>-->
-        <!--<item name="value">150000</item>-->
+    <!--<item name="key">15秒</item>-->
+    <!--<item name="value">150000</item>-->
     <!--</string-array>-->
 
     <!--<array name="time_array">-->
-        <!--<item>@array/sort_spinner_item1</item>-->
-        <!--<item>@array/sort_spinner_item2</item>-->
-        <!--<item>@array/sort_spinner_item3</item>-->
+    <!--<item>@array/sort_spinner_item1</item>-->
+    <!--<item>@array/sort_spinner_item2</item>-->
+    <!--<item>@array/sort_spinner_item3</item>-->
     <!--</array>-->
 
     <array name="time_array">

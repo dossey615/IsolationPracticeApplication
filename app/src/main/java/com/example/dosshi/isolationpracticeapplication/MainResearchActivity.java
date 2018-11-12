@@ -10,9 +10,11 @@ import android.widget.TextView;
 public class MainResearchActivity extends AppCompatActivity{
 
     private TextView text;
+    private Globals globals;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
 
         // ここで1秒間スリープし、スプラッシュを表示させたままにする。
@@ -24,6 +26,8 @@ public class MainResearchActivity extends AppCompatActivity{
         setTheme(R.style.AppTheme);
         setContentView(R.layout.activity_main_reaearch);
         Button sendButton = findViewById(R.id.start);
+        globals = (Globals) this.getApplication();
+        globals.valueInit();
         sendButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplication(), SelectPartsActivity.class);

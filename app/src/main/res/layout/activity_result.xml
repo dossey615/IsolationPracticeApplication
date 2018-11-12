@@ -12,7 +12,7 @@
         android:layout_height="156dp"
         android:layout_marginBottom="16dp"
         android:layout_marginStart="24dp"
-        android:contentDescription="TODO"
+        android:contentDescription="@string/todo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/dancer_img" />
@@ -21,12 +21,12 @@
         android:id="@+id/practiceAdvice"
         android:layout_width="170dp"
         android:layout_height="50dp"
-        android:layout_marginBottom="13dp"
         android:layout_marginEnd="16dp"
-        android:text="練習方法"
+        android:layout_marginBottom="13dp"
+        android:text="@string/accel"
         app:layout_constraintBottom_toTopOf="@+id/titleback"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:text="練習方法" />
+        tools:text="加速度データ" />
 
     <Button
         android:id="@+id/titleback"
@@ -34,7 +34,7 @@
         android:layout_height="50dp"
         android:layout_marginBottom="33dp"
         android:layout_marginEnd="16dp"
-        android:text="タイトルに戻る"
+        android:text="@string/backtop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="タイトルに戻る" />

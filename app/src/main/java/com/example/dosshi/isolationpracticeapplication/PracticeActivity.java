@@ -103,7 +103,7 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
             // Listenerの登録
             accel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
             gyro = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
-            sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_NORMAL);
+            sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_FASTEST);
             sensorManager.registerListener(this, gyro, SensorManager.SENSOR_DELAY_NORMAL);
 
     }
@@ -137,7 +137,9 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
-        watchResult.add(messageEvent.getPath());
+        if(flag == 1) {
+            watchResult.add(messageEvent.getPath());
+        }
     }
 
 
@@ -152,12 +154,14 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
                 sensorX = event.values[0];
                 sensorY = event.values[1];
                 sensorZ = event.values[2];
+                globals.mobileAccelDataSet(sensorX, sensorY, sensorZ);
                     if(sensorX > 8 || sensorZ > 4 ) vibrator.vibrate(100);
                     else vibrator.cancel();
                     String strTmp = "加速度センサー\n"
                             + " X: " + sensorX + "\n"
                             + " Y: " + sensorY + "\n"
                             + " Z: " + sensorZ;
+                   globals.size++;
                     accelText.setText(strTmp);
                 break;
 
