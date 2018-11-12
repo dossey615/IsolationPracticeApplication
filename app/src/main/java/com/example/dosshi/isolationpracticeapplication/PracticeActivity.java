@@ -103,7 +103,7 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
             // Listenerの登録
             accel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
             gyro = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
-            sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_FASTEST);
+            sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_NORMAL);
             sensorManager.registerListener(this, gyro, SensorManager.SENSOR_DELAY_NORMAL);
 
     }
