@@ -81,7 +81,7 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
 
         //タイマーの初期設定
         long countNumber = 4000;
-        long interval = 10;
+        long interval = 1000;
         prTimeText.setVisibility(View.INVISIBLE);
         countDown = new CountDown(countNumber, interval);
     }
@@ -93,6 +93,8 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
         //GoogleApiClient接続
         mGoogleApiClient.connect();
         countDown.start();
+        globals.soundPool.play(globals.countBgm, 1.0f, 1.0f, 0, 0, 1.0f);
+
     }
 
     /*--以下は加速度センサーの実装--*/

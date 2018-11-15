@@ -28,6 +28,7 @@ public class MainResearchActivity extends AppCompatActivity{
         Button sendButton = findViewById(R.id.start);
         globals = (Globals) this.getApplication();
         globals.valueInit();
+        globals.soundInit();
         sendButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplication(), SelectPartsActivity.class);
