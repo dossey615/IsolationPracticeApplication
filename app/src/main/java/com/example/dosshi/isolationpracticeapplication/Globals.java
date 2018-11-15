@@ -28,6 +28,13 @@ public class Globals extends Application {
     public void watchDataSet(ArrayList array){
         watchData = array;
     }
+
+    public String[] getWatchData(int i){
+        String save = (String)(this.watchData.get(i));
+        String[] data = save.split(",", 0);
+        return data;
+    }
+
     public void mobileAccelDataSet(float x, float y, float z){
         if(mobileX.size() != 0){
           x = lowpassfilter(old_X, x);
@@ -41,6 +48,7 @@ public class Globals extends Application {
         mobileY.add(String.valueOf(y));
         mobileZ.add(String.valueOf(z));
     }
+
     public float lowpassfilter(float value1, float value2){
         value2 = (float)(value1 * 0.9 + value2 * 0.1);
         return value2;
