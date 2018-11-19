@@ -42,22 +42,27 @@ public class Globals extends Application {
     }
 
     public void mobileAccelDataSet(float x, float y, float z){
-        if(mobileX.size() != 0){
-          x = lowpassfilter(old_X, x);
-          y = lowpassfilter(old_Y, y);
-          z = lowpassfilter(old_Z, z);
-          old_X = x;
-          old_Y = y;
-          old_Z = z;
-        }
+//        if(mobileX.size() != 0){
+//          x = highPassFilter(old_X, x);
+//          y = highPassFilter(old_Y, y);
+//          z = highPassFilter(old_Z, z);
+//          old_X = x;
+//          old_Y = y;
+//          old_Z = z;
+//        }
         mobileX.add(String.valueOf(x));
         mobileY.add(String.valueOf(y));
         mobileZ.add(String.valueOf(z));
     }
 
+    public float highPassFilter(float value1, float value2){
+        value1 = value2 - lowpassfilter(value1,value2);
+        return value1;
+    }
+
     public float lowpassfilter(float value1, float value2){
-        value2 = (float)(value1 * 0.9 + value2 * 0.1);
-        return value2;
+        value1 = (float)(value1 * 0.9 + value2 * 0.1);
+        return value1;
     }
 
     public void soundInit(){
