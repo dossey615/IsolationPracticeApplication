@@ -6,6 +6,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
@@ -56,6 +57,8 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
         setContentView(R.layout.activity_practice);
         //グローバル変数を取得
         globals = (Globals) this.getApplication();
+
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         //テキストのidを取得し、連携
         timerText = findViewById(R.id.count);
@@ -192,6 +195,8 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
         public void onFinish() {
             // 完了
             if (flag == 0) {
+                globals.mediaPlayer.start();
+                globals.soundPool.stop(globals.countBgm);
                 prTimeText.setVisibility(View.VISIBLE);
                 timerText.setTextSize(60);
                 timerText.setText("計測中・・・");
@@ -199,6 +204,7 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
                 countDown.start();
                 flag = 1;
             } else {
+                globals.mediaPlayer.stop();
                 timerText.setText("finish");
                 timerText.setVisibility(View.INVISIBLE);
                 globals.watchDataSet(watchResult);

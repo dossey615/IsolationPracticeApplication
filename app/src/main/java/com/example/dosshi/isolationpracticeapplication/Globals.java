@@ -1,15 +1,20 @@
 package com.example.dosshi.isolationpracticeapplication;
 
 import android.app.Application;
+import android.content.res.AssetFileDescriptor;
 import android.media.AudioAttributes;
+import android.media.MediaPlayer;
 import android.media.SoundPool;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Globals extends Application {
     //グローバル変数
     String slctParts = "";
     SoundPool soundPool;
+    MediaPlayer mediaPlayer;
+
 
     ArrayList watchData = new ArrayList();
     ArrayList mobileX = new ArrayList();
@@ -63,6 +68,22 @@ public class Globals extends Application {
     public float lowpassfilter(float value1, float value2){
         value1 = (float)(value1 * 0.9 + value2 * 0.1);
         return value1;
+    }
+    public void SetBgm(){
+        String filePath = "beat8.wav";
+        // assetsのファイルをオープン
+        // MediaPlayer のインスタンス生成
+        mediaPlayer = new MediaPlayer();
+
+        try (AssetFileDescriptor afdescripter = getAssets().openFd(filePath);){
+        // MediaPlayerに読み込んだ音楽ファイルを指定
+        mediaPlayer.setDataSource(afdescripter.getFileDescriptor(),
+                afdescripter.getStartOffset(),
+                afdescripter.getLength());
+        mediaPlayer.prepare();
+    } catch (IOException e1) {
+        e1.printStackTrace();
+    }
     }
 
     public void soundInit(){
