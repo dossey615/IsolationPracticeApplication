@@ -50,18 +50,17 @@ public class PartsDescriptionActivity extends AppCompatActivity {
 
         //時間のスピナー表示
         Button stbutton = findViewById(R.id.start_assist);
-        initSpinners();
         startButton(stbutton);
+        initSpinners();
     }
 
     private void startButton(Button button) {
         final Intent intent = new Intent(getApplication(), PracticeActivity.class);
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        startActivity(intent);
-//        button.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
 //                if (mNode != null) {
-//                    //startActivity(intent);
+                    startActivity(intent);
 //                    Wearable.MessageApi.sendMessage(client, mNode, "OK", null).setResultCallback(new ResultCallback<MessageApi.SendMessageResult>() {
 //                        @Override
 //                        public void onResult(MessageApi.SendMessageResult result) {
@@ -79,8 +78,8 @@ public class PartsDescriptionActivity extends AppCompatActivity {
 //                            });
 //                    builder.show();
 //                }
-//            }
-//        });
+            }
+        });
     }
 
 

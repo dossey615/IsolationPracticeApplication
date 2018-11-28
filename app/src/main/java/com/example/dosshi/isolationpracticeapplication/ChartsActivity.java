@@ -44,8 +44,8 @@ public class ChartsActivity extends AppCompatActivity {
 
         YAxis leftAxis = mChart.getAxisLeft();
         // Y軸最大最小設定
-        leftAxis.setAxisMaximum(10);
-        leftAxis.setAxisMinimum(-10);
+        leftAxis.setAxisMaximum(globals.maxValue()+0.01f);
+        leftAxis.setAxisMinimum(globals.minValue()-0.01f);
         // Grid横軸を破線
         leftAxis.enableGridDashedLine(10f, 10f, 0f);
         leftAxis.setDrawZeroLine(false);

@@ -50,7 +50,7 @@ public class ResultActivity extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
 
-        FileOutput();
+        //FileOutput();
 
         //それぞれのボタンを押した時の設定
         title.setOnClickListener(new View.OnClickListener() {

@@ -84,7 +84,7 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
 
         //タイマーの初期設定
         long countNumber = 4000;
-        long interval = 1000;
+        long interval = 10;
         prTimeText.setVisibility(View.INVISIBLE);
         countDown = new CountDown(countNumber, interval);
     }
