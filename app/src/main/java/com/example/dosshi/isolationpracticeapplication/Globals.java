@@ -21,6 +21,10 @@ public class Globals extends Application {
     ArrayList mobileY = new ArrayList();
     ArrayList mobileZ = new ArrayList();
 
+    ArrayList storageX = new ArrayList();
+    ArrayList storageY = new ArrayList();
+    ArrayList storageZ = new ArrayList();
+
 
 
     float oldAccel_X = 0;
@@ -29,7 +33,7 @@ public class Globals extends Application {
     float oldSpeed_X = 0;
     float oldSpeed_Y = 0;
     float oldSpeed_Z = 0;
-    float timeSpan = 0.03f;
+    float timeSpan = 0.1f;
 
     //加速度から算出した速度
     float speed = 0;

@@ -16,6 +16,8 @@
     <string name="todo">TODO</string>
     <string name="accel">加速度データ</string>
     <string name="backtop">タイトルに戻る</string>
+    <string name="part1">軸部の結果</string>
+    <string name="moveParts">可動部の結果</string>
 
     <!--<string-array name="sort_spinner_item1">-->
     <!--<item name="key">５秒</item>-->

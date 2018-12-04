@@ -3,6 +3,7 @@ package com.example.dosshi.isolationpracticeapplication;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -15,9 +16,12 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -50,6 +54,7 @@ public class ResultActivity extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
 
+        SaveToSDcard();
         //FileOutput();
 
         //それぞれのボタンを押した時の設定
@@ -127,6 +132,23 @@ public class ResultActivity extends AppCompatActivity {
                         // ...
                     }
                 });
+    }
+
+    public void SaveToSDcard(){
+        String filePath = Environment.getExternalStorageDirectory() + "/memo.csv";
+        File file = new File(filePath);
+        file.getParentFile().mkdir();
+
+        FileOutputStream fos;
+        try {
+            fos = new FileOutputStream(file, true);
+            OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8");
+            BufferedWriter bw = new BufferedWriter(osw);
+            bw.write("sucsses");
+            bw.flush();
+            bw.close();
+        } catch (Exception e) {
+        }
     }
 
 }

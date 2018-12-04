@@ -41,7 +41,7 @@
             android:name=".ResultActivity"
             android:label="ResultData"
             android:screenOrientation="portrait" />
-        <activity android:name=".ChartsActivity"></activity>
+        <activity android:name=".ChartsActivity"/>
     </application>
 
 </manifest>
