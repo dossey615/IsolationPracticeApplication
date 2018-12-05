@@ -3,7 +3,6 @@ package com.example.dosshi.isolationpracticeapplication;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -11,19 +10,18 @@ import android.widget.Button;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 
 
 public class ResultActivity extends AppCompatActivity {
@@ -34,7 +32,7 @@ public class ResultActivity extends AppCompatActivity {
     private StorageReference storageRef;
     private String fileName;
 
-    private Date date;
+    private String date;
 
     private String path;
 
@@ -42,8 +40,12 @@ public class ResultActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //現在日時を取得する
+        Calendar cal = Calendar.getInstance();
+        //フォーマットパターンを指定して表示する
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd_E_HH:mm:ss");
+        date = sdf.format(cal.getTime());
 
-        date = new Date();
         //UIのデータを取得
         setContentView(R.layout.activity_result);
         Button title = findViewById(R.id.titleback);
@@ -54,8 +56,8 @@ public class ResultActivity extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
 
-        SaveToSDcard();
-        //FileOutput();
+//        SaveToSDcard();
+        FileOutput();
 
         //それぞれのボタンを押した時の設定
         title.setOnClickListener(new View.OnClickListener() {
@@ -114,15 +116,19 @@ public class ResultActivity extends AppCompatActivity {
     public void fileUpload(File dataFile){
         Uri file = Uri.fromFile(dataFile);
         //csvファイルを入れるpathの作成
-        StorageReference riversRef = storageRef.child(date + "/" +file.getLastPathSegment());
+        final StorageReference riversRef = storageRef.child(date + "/" +file.getLastPathSegment());
 
         //csvファイルをcloud storageに
         riversRef.putFile(file)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // Get a URL to the uploaded content
-//                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                        riversRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                setDatabase(uri.toString());
+                            }
+                        });
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -134,21 +140,17 @@ public class ResultActivity extends AppCompatActivity {
                 });
     }
 
-    public void SaveToSDcard(){
-        String filePath = Environment.getExternalStorageDirectory() + "/memo.csv";
-        File file = new File(filePath);
-        file.getParentFile().mkdir();
+    public void setDatabase(String path){
+        database = FirebaseDatabase.getInstance();
+        DatabaseReference RefCSV = database.getReference("User1/"+globals.slctParts+"/");
+        RefCSV = RefCSV.push();
+        RefCSV.child("URL").setValue(path);
+        RefCSV.child("Date").setValue(date);
 
-        FileOutputStream fos;
-        try {
-            fos = new FileOutputStream(file, true);
-            OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8");
-            BufferedWriter bw = new BufferedWriter(osw);
-            bw.write("sucsses");
-            bw.flush();
-            bw.close();
-        } catch (Exception e) {
-        }
+    }
+
+    public void SaveToSDcard(){
+
     }
 
 }
