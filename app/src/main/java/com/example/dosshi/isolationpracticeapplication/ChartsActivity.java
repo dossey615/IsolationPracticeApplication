@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -12,6 +13,11 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -50,6 +56,8 @@ public class ChartsActivity extends AppCompatActivity {
             }
         });
         globals = (Globals)this.getApplication();
+        loadhistry();
+        initCharts(0);
     }
 
 
@@ -70,8 +78,8 @@ public class ChartsActivity extends AppCompatActivity {
         YAxis leftAxis = mChart.getAxisLeft();
         // Y軸最大最小設定
 
-        leftAxis.setAxisMaximum(globals.maxValue() * 100 + 0.01f);
-        leftAxis.setAxisMinimum(globals.minValue() * 100 - 0.01f);
+        leftAxis.setAxisMaximum(globals.maxValue() + 10f);
+        leftAxis.setAxisMinimum(globals.minValue() - 10f);
         // Grid横軸を破線
         leftAxis.enableGridDashedLine(10f, 10f, 0f);
         leftAxis.setDrawZeroLine(false);
@@ -89,6 +97,32 @@ public class ChartsActivity extends AppCompatActivity {
         // mChart.invalidate();
     }
 
+    public void loadhistry(){
+        //Get datasnapshot at your "users" root node
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/User1/").child(globals.slctParts);
+        ref.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        //Get map of users in datasnapshot
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+
+                            String date = (String) dataSnapshot.child("Date").getValue();
+                            String url = (String) dataSnapshot.child("URL").getValue();
+                            globals.setHistoryData(date,url);
+
+                            Log.d("Firebase", String.format("date:%s, url:%s", date, url));
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        //handle databaseError
+                    }
+                });
+    }
+
     public void setData(int flag){
 
 
@@ -98,15 +132,15 @@ public class ChartsActivity extends AppCompatActivity {
 
         if(flag == 0) {
             for (int i = 0; i < globals.mobileX.size(); i++) {
-                mobileAccelval_X.add(new Entry(i, Float.parseFloat((String) globals.mobileX.get(i)) * 100));
-                mobileAccelval_Y.add(new Entry(i, Float.parseFloat((String) globals.mobileY.get(i)) * 100));
-                mobileAccelval_Z.add(new Entry(i, Float.parseFloat((String) globals.mobileZ.get(i)) * 100));
+                mobileAccelval_X.add(new Entry(i, Float.parseFloat((String) globals.mobileX.get(i))));
+                mobileAccelval_Y.add(new Entry(i, Float.parseFloat((String) globals.mobileY.get(i))));
+                mobileAccelval_Z.add(new Entry(i, Float.parseFloat((String) globals.mobileZ.get(i))));
             }
         }else{
-            for (int i = 0; i < globals.mobileX.size(); i++) {
-                mobileAccelval_X.add(new Entry(i, Float.parseFloat((String) globals.mobileX.get(i)) * 100));
-                mobileAccelval_Y.add(new Entry(i, Float.parseFloat((String) globals.mobileX.get(i)) * 100));
-                mobileAccelval_Z.add(new Entry(i, Float.parseFloat((String) globals.mobileX.get(i)) * 100));
+            for (int i = 0; i < globals.watchX.size(); i++) {
+                mobileAccelval_X.add(new Entry(i, (float)globals.watchX.get(i)));
+                mobileAccelval_Y.add(new Entry(i, (float)globals.watchY.get(i)));
+                mobileAccelval_Z.add(new Entry(i, (float)globals.watchZ.get(i)));
             }
         }
 
@@ -142,7 +176,7 @@ public class ChartsActivity extends AppCompatActivity {
 
     private LineDataSet setCharts(LineDataSet set, int col){
         set.setDrawIcons(false);
-        set.setDrawCircles(true);
+        set.setDrawCircles(false);
         set.setColor(col);
         set.setLineWidth(1f);
         set.setValueTextSize(0f);

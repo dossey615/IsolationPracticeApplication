@@ -8,6 +8,7 @@ import android.media.SoundPool;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Globals extends Application {
     //グローバル変数
@@ -15,15 +16,15 @@ public class Globals extends Application {
     SoundPool soundPool;
     MediaPlayer mediaPlayer;
 
-
+    HashMap<String,String> historyData = new HashMap<String,String>();
     ArrayList watchData = new ArrayList();
     ArrayList mobileX = new ArrayList();
     ArrayList mobileY = new ArrayList();
     ArrayList mobileZ = new ArrayList();
 
-    ArrayList storageX = new ArrayList();
-    ArrayList storageY = new ArrayList();
-    ArrayList storageZ = new ArrayList();
+    ArrayList watchX = new ArrayList();
+    ArrayList watchY = new ArrayList();
+    ArrayList watchZ = new ArrayList();
 
 
 
@@ -33,14 +34,24 @@ public class Globals extends Application {
     float oldSpeed_X = 0;
     float oldSpeed_Y = 0;
     float oldSpeed_Z = 0;
+
+    float oldAccel_WX = 0;
+    float oldAccel_WY = 0;
+    float oldAccel_WZ = 0;
+    float oldSpeed_WX = 0;
+    float oldSpeed_WY = 0;
+    float oldSpeed_WZ = 0;
+
     float timeSpan = 0.1f;
 
     //加速度から算出した速度
     float speed = 0;
-    float difference = 0;
     float differenceX = 0;
     float differenceY = 0;
     float differenceZ = 0;
+    float differenceWX = 0;
+    float differenceWY = 0;
+    float differenceWZ = 0;
 
 
     int size = 0;
@@ -49,73 +60,112 @@ public class Globals extends Application {
 
     public void valueInit() {
         String slctParts = "";
+
+        historyData.clear();
         watchData.clear();
         mobileX.clear();
         mobileY.clear();
         mobileZ.clear();
+
         oldAccel_X = 0;
         oldAccel_Y = 0;
         oldAccel_Z = 0;
         oldSpeed_X = 0;
         oldSpeed_Y = 0;
         oldSpeed_Z = 0;
+        oldAccel_WX = 0;
+        oldAccel_WY = 0;
+        oldAccel_WZ = 0;
+        oldSpeed_WX = 0;
+        oldSpeed_WY = 0;
+        oldSpeed_WZ = 0;
 
         mobileX.add("0");
         mobileY.add("0");
         mobileZ.add("0");
-
+        watchX.add((float)0);
+        watchY.add((float)0);
+        watchZ.add((float)0);
 
         //加速度から算出した速度
         speed = 0;
-        difference = 0;
         differenceX = 0;
         differenceY = 0;
         differenceZ = 0;
+    }
+    public void setHistoryData(String date, String url){
+        historyData.put(date, url);
     }
 
     public void watchDataSet(ArrayList array){
         watchData = array;
     }
 
-    public String[] getWatchData(int i){
-        String save = (String)(this.watchData.get(i));
+    public void getWatchData(String save){
         String[] data = save.split(",", 0);
-        return data;
+        float x = Float.parseFloat(data[0]);
+        float y = Float.parseFloat(data[1]);
+        float z = Float.parseFloat(data[2]);
+        watchX.add(x);
+        watchY.add(y);
+        watchZ.add(z);
+//        watchX.add(CalculationDisplacement(x,oldAccel_WX,timeSpan,oldSpeed_WX,differenceWX,3));
+//        watchY.add(CalculationDisplacement(y,oldAccel_WY,timeSpan,oldSpeed_WY,differenceWY,4));
+//        watchZ.add(CalculationDisplacement(z,oldAccel_WZ,timeSpan,oldSpeed_WZ,differenceWZ,5));
     }
 
     public void mobileAccelDataSet(float x, float y, float z){
         //スマホの値をそれぞれセット
-        mobileX.add(CalculationDisplacement(x,oldAccel_X,timeSpan,oldSpeed_X,differenceX,0));
-        mobileY.add(CalculationDisplacement(y,oldAccel_Y,timeSpan,oldSpeed_Y,differenceY,1));
-        mobileZ.add(CalculationDisplacement(z,oldAccel_Z,timeSpan,oldSpeed_Z,differenceY,2));
+        mobileX.add(CalculationDisplacement(noiseClear(x),oldAccel_X,timeSpan,oldSpeed_X,differenceX,0));
+        mobileY.add(CalculationDisplacement(noiseClear(y),oldAccel_Y,timeSpan,oldSpeed_Y,differenceY,1));
+        mobileZ.add(CalculationDisplacement(noiseClear(z),oldAccel_Z,timeSpan,oldSpeed_Z,differenceY,2));
     }
 
     public float noiseClear(float noise){
-        if(Math.abs(noise) < 0.024)noise = 0;
+        //if(Math.abs(noise) < 0.024)noise = 0;
         return noise;
     }
 
-    public String CalculationDisplacement(float highpassValue,float oldAccel,float timeSpan,float oldSpeed,float difference,int j){
+    public String CalculationDisplacement(float highpassValue,float oldAccel,float timeSpan,float oldSpeed,float difference,int j) {
         // 速度計算(加速度を台形積分する)
-        speed = ((highpassValue + oldAccel) * timeSpan) / 2f ;
+        speed = ((highpassValue + oldAccel) * timeSpan) / 2f + oldSpeed;
         // 変位計算(速度を台形積分する)
-        difference = ((speed + oldSpeed) * timeSpan) / 2f;
-        switch (j){
+        difference = ((speed + oldSpeed) * timeSpan) / 2f + difference;
+        switch (j) {
             case 0:
+                oldAccel_X = highpassValue;
                 oldSpeed_X = speed;
                 differenceX = difference;
                 break;
             case 1:
+                oldAccel_Y = highpassValue;
                 oldSpeed_Y = speed;
                 differenceY = difference;
                 break;
-            default:
+            case 2:
+                oldAccel_Z = highpassValue;
                 oldSpeed_Z = speed;
                 differenceZ = difference;
                 break;
+            case 3:
+                oldAccel_WX = highpassValue;
+                oldSpeed_WX = speed;
+                differenceWX = difference;
+                break;
+            case 4:
+                oldAccel_WY = highpassValue;
+                oldSpeed_WY = speed;
+                differenceWY = difference;
+                break;
+            default:
+                oldAccel_WZ = highpassValue;
+                oldSpeed_WZ = speed;
+                differenceWZ = difference;
+                break;
         }
-        return String.valueOf(difference);
+            return String.valueOf(difference);
     }
+
 
     //加速度の最大値、最小値を求める関数
     public float maxValue(){

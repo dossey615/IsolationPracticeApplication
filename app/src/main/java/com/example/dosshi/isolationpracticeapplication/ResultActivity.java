@@ -78,7 +78,7 @@ public class ResultActivity extends AppCompatActivity {
 //csvファイルの作成
     private void FileOutput() {
 
-        fileName = globals.slctParts + ".csv";
+        fileName = date + ".csv";
         //出力先を作成する
         File file = new File(getFilesDir(), fileName);
         FileWriter fileWriter = null;
@@ -116,7 +116,7 @@ public class ResultActivity extends AppCompatActivity {
     public void fileUpload(File dataFile){
         Uri file = Uri.fromFile(dataFile);
         //csvファイルを入れるpathの作成
-        final StorageReference riversRef = storageRef.child(date + "/" +file.getLastPathSegment());
+        final StorageReference riversRef = storageRef.child(globals.slctParts + "/" +file.getLastPathSegment());
 
         //csvファイルをcloud storageに
         riversRef.putFile(file)

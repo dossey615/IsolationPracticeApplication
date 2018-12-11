@@ -1,6 +1,7 @@
 package com.example.dosshi.isolationpracticeapplication;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.wearable.MessageApi;
 import com.google.android.gms.wearable.NodeApi;
 import com.google.android.gms.wearable.Wearable;
 
@@ -59,25 +61,25 @@ public class PartsDescriptionActivity extends AppCompatActivity {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-//                if (mNode != null) {
+                if (mNode != null) {
                     startActivity(intent);
-//                    Wearable.MessageApi.sendMessage(client, mNode, "OK", null).setResultCallback(new ResultCallback<MessageApi.SendMessageResult>() {
-//                        @Override
-//                        public void onResult(MessageApi.SendMessageResult result) {
-//                            if (!result.getStatus().isSuccess()) {
-//                                Log.d(TAG, "ERROR : failed to send Message" + result.getStatus());
-//                            }
-//                        }
-//                    });
-//                }else{
-//                    builder.setTitle("ウォッチがセットされていません");
-//                    builder.setMessage("ウォッチアプリを起動し\n指定した箇所にセットしてください")
-//                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                                public void onClick(DialogInterface dialog, int id) {
-//                                }
-//                            });
-//                    builder.show();
-//                }
+                    Wearable.MessageApi.sendMessage(client, mNode, "OK", null).setResultCallback(new ResultCallback<MessageApi.SendMessageResult>() {
+                        @Override
+                        public void onResult(MessageApi.SendMessageResult result) {
+                            if (!result.getStatus().isSuccess()) {
+                                Log.d(TAG, "ERROR : failed to send Message" + result.getStatus());
+                            }
+                        }
+                    });
+                }else{
+                    builder.setTitle("ウォッチがセットされていません");
+                    builder.setMessage("ウォッチアプリを起動し\n指定した箇所にセットしてください")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                }
+                            });
+                    builder.show();
+                }
             }
         });
     }
