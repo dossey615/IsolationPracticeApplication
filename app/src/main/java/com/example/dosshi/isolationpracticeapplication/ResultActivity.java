@@ -89,18 +89,19 @@ public class ResultActivity extends AppCompatActivity {
         try {
             fileWriter = new FileWriter(file);
             fileWriter.write(
-                    "time,AxisAccl_X,AxisAccl_Y,AxisAccl_Z,"
-                            + "MvAccl_X,MvAccl_Y,MvAccl_Z, "
-                            + "AxisGyr_X,AxisGyr_Y,AxisGyr_Z,"
-                            + "MvGyr_X,MvGyr_Y,MvGyr_Z"
+                    "Mobiletimestamp,MobileAccl_X,MobileAccl_Y,MobileAccl_Z,"
+                            + "MobileRealAccl_X,MobileRealAccl_Y,MobileRealAccl_Z, "
+                            + "Watchtimestamp,Watch_X,Watch_Y,Watch_Z,"
+                            + "WatchReal_X,WatchReal_Y,WatchReal_Z"
                             + "\n"
             );
-            for (int i = 0; i < globals.mobileX.size(); i++) {
-                fileWriter.write(i + ","
+            for (int i = 0; i < globals.compasionSize(); i++) {
+                fileWriter.write(globals.mobileTimestamp.get(i) + ","
                                 + mobAccelX.get(i) + ","
                                 + mobAccelY.get(i) + ","
                                 + mobAccelZ.get(i) + ","
-//                                + globals.watchData.get(i)
+                                + globals.mobileRealdata + ","
+                                + globals.watchData.get(i)
                                 + "\n"
                 );
             }

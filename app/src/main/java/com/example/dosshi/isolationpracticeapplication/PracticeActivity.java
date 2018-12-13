@@ -42,6 +42,7 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
     private Vibrator vibrator;
     private CountDown countDown;
     private SensorManager sensorManager;
+    private Sensor realaccel;
     private Sensor accel;
     private Sensor gyro;
 
@@ -106,8 +107,10 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
     protected void onResume() {
             super.onResume();
             // Listenerの登録
+        realaccel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
             accel = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
             gyro = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+            sensorManager.registerListener(this, realaccel, SensorManager.SENSOR_DELAY_FASTEST);
             sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_FASTEST);
             sensorManager.registerListener(this, gyro, SensorManager.SENSOR_DELAY_NORMAL);
 
@@ -160,7 +163,7 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
                 sensorX = event.values[0];
                 sensorY = event.values[1];
                 sensorZ = event.values[2];
-                globals.mobileAccelDataSet(sensorX, sensorY, sensorZ);
+                globals.mobileAccelDataSet(sensorX, sensorY, sensorZ,event.timestamp);
                     if(sensorX > 8 || sensorZ > 4 ) vibrator.vibrate(100);
                     else vibrator.cancel();
                     String strTmp = "加速度センサー\n"
@@ -170,6 +173,10 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
                    globals.size++;
                     accelText.setText(strTmp);
                 break;
+                case  Sensor.TYPE_ACCELEROMETER:
+                    String s = event.values[0] + "," + event.values[1] + "," + event.values[2];
+                    globals.watchTimestamp.add(s);
+                    break;
 
                 case Sensor.TYPE_GYROSCOPE:
                 gyroX = event.values[0];

@@ -25,6 +25,10 @@ public class Globals extends Application {
     ArrayList watchX = new ArrayList();
     ArrayList watchY = new ArrayList();
     ArrayList watchZ = new ArrayList();
+    ArrayList mobileTimestamp = new ArrayList();
+    ArrayList<String> watchTimestamp = new ArrayList<>();
+    ArrayList<String> watchrealData= new ArrayList<>();
+    ArrayList<String> mobileRealdata = new ArrayList<>();
 
 
 
@@ -66,6 +70,8 @@ public class Globals extends Application {
         mobileX.clear();
         mobileY.clear();
         mobileZ.clear();
+        watchTimestamp.clear();
+        mobileTimestamp.clear();
 
         oldAccel_X = 0;
         oldAccel_Y = 0;
@@ -80,6 +86,8 @@ public class Globals extends Application {
         oldSpeed_WY = 0;
         oldSpeed_WZ = 0;
 
+        mobileTimestamp.add("0");
+        watchTimestamp.add("0");
         mobileX.add("0");
         mobileY.add("0");
         mobileZ.add("0");
@@ -103,22 +111,28 @@ public class Globals extends Application {
 
     public void getWatchData(String save){
         String[] data = save.split(",", 0);
-        float x = Float.parseFloat(data[0]);
-        float y = Float.parseFloat(data[1]);
-        float z = Float.parseFloat(data[2]);
+        float x = Float.parseFloat(data[1]);
+        float y = Float.parseFloat(data[2]);
+        float z = Float.parseFloat(data[3]);
+        watchTimestamp.add(data[0]);
         watchX.add(x);
         watchY.add(y);
         watchZ.add(z);
+
 //        watchX.add(CalculationDisplacement(x,oldAccel_WX,timeSpan,oldSpeed_WX,differenceWX,3));
 //        watchY.add(CalculationDisplacement(y,oldAccel_WY,timeSpan,oldSpeed_WY,differenceWY,4));
 //        watchZ.add(CalculationDisplacement(z,oldAccel_WZ,timeSpan,oldSpeed_WZ,differenceWZ,5));
     }
 
-    public void mobileAccelDataSet(float x, float y, float z){
+    public void mobileAccelDataSet(float x, float y, float z,long stamp){
+        mobileX.add(String.valueOf(x));
+        mobileY.add(String.valueOf(y));
+        mobileZ.add(String.valueOf(z));
+        mobileTimestamp.add(String.valueOf(stamp));
         //スマホの値をそれぞれセット
-        mobileX.add(CalculationDisplacement(noiseClear(x),oldAccel_X,timeSpan,oldSpeed_X,differenceX,0));
-        mobileY.add(CalculationDisplacement(noiseClear(y),oldAccel_Y,timeSpan,oldSpeed_Y,differenceY,1));
-        mobileZ.add(CalculationDisplacement(noiseClear(z),oldAccel_Z,timeSpan,oldSpeed_Z,differenceY,2));
+//        mobileX.add(CalculationDisplacement(noiseClear(x),oldAccel_X,timeSpan,oldSpeed_X,differenceX,0));
+//        mobileY.add(CalculationDisplacement(noiseClear(y),oldAccel_Y,timeSpan,oldSpeed_Y,differenceY,1));
+//        mobileZ.add(CalculationDisplacement(noiseClear(z),oldAccel_Z,timeSpan,oldSpeed_Z,differenceZ,2));
     }
 
     public float noiseClear(float noise){
@@ -209,6 +223,12 @@ public class Globals extends Application {
     public float lowpassfilter(float value1, float value2){
         value1 = (float)(value1 * 0.9 + value2 * 0.1);
         return value1;
+    }
+
+    public int compasionSize(){
+        int minSize = mobileTimestamp.size();
+        if(minSize > watchData.size())minSize = watchData.size();
+        return minSize;
     }
 
     //音楽再生用の関数

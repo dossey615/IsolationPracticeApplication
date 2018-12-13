@@ -74,9 +74,12 @@ public class ChartsActivity extends AppCompatActivity {
         XAxis xAxis = mChart.getXAxis();
         xAxis.enableGridDashedLine(10f, 10f, 0f);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setLabelRotationAngle(45);
+
 
         YAxis leftAxis = mChart.getAxisLeft();
         // Y軸最大最小設定
+        leftAxis.getLabelPosition();
 
         leftAxis.setAxisMaximum(globals.maxValue() + 10f);
         leftAxis.setAxisMinimum(globals.minValue() - 10f);
@@ -129,12 +132,14 @@ public class ChartsActivity extends AppCompatActivity {
         ArrayList<Entry> mobileAccelval_X = new ArrayList<>();
         ArrayList<Entry> mobileAccelval_Y = new ArrayList<>();
         ArrayList<Entry> mobileAccelval_Z = new ArrayList<>();
+        ArrayList<String> timestamp = new ArrayList<>();
 
         if(flag == 0) {
             for (int i = 0; i < globals.mobileX.size(); i++) {
                 mobileAccelval_X.add(new Entry(i, Float.parseFloat((String) globals.mobileX.get(i))));
                 mobileAccelval_Y.add(new Entry(i, Float.parseFloat((String) globals.mobileY.get(i))));
                 mobileAccelval_Z.add(new Entry(i, Float.parseFloat((String) globals.mobileZ.get(i))));
+                timestamp.add((String)globals.mobileTimestamp.get(i));
             }
         }else{
             for (int i = 0; i < globals.watchX.size(); i++) {
