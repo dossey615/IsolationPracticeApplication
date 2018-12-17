@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
@@ -31,6 +32,7 @@ public class ResultActivity extends AppCompatActivity {
     private FirebaseStorage storage;
     private StorageReference storageRef;
     private String fileName;
+    private GoogleApiClient mGoogleApiClient;
 
     private String date;
 
@@ -95,13 +97,18 @@ public class ResultActivity extends AppCompatActivity {
                             + "WatchReal_X,WatchReal_Y,WatchReal_Z"
                             + "\n"
             );
-            for (int i = 0; i < globals.compasionSize(); i++) {
+            int size = globals.compasionSize();
+            for (int i = 0; i < size - 1 ; i++) {
                 fileWriter.write(globals.mobileTimestamp.get(i) + ","
                                 + mobAccelX.get(i) + ","
                                 + mobAccelY.get(i) + ","
                                 + mobAccelZ.get(i) + ","
-                                + globals.mobileRealdata + ","
-                                + globals.watchData.get(i)
+                                + globals.mobileRealdata.get(i) + ","
+                                + globals.watchTimestamp.get(i) + ","
+                                + globals.watchX.get(i) + ","
+                                + globals.watchY.get(i) + ","
+                                + globals.watchZ.get(i) + ","
+                                + globals.watchrealData.get(i) + ","
                                 + "\n"
                 );
             }

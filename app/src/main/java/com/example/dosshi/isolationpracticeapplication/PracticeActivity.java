@@ -45,6 +45,7 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
     private Sensor realaccel;
     private Sensor accel;
     private Sensor gyro;
+    private int count = 0;
 
     private SimpleDateFormat timeFormat =
             new SimpleDateFormat("mm:ss.SSS", Locale.US);
@@ -107,11 +108,9 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
     protected void onResume() {
             super.onResume();
             // Listenerの登録
-        realaccel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-            accel = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
+            accel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
             gyro = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
-            sensorManager.registerListener(this, realaccel, SensorManager.SENSOR_DELAY_FASTEST);
-            sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_FASTEST);
+            sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_NORMAL);
             sensorManager.registerListener(this, gyro, SensorManager.SENSOR_DELAY_NORMAL);
 
     }
@@ -146,6 +145,8 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
         if(flag == 1) {
+            count++;
+            //Log.d("getWatchData", String.format("SUM:%f",count));
             globals.getWatchData(messageEvent.getPath());
             watchResult.add(messageEvent.getPath());
         }
@@ -159,7 +160,7 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
         float gyroX, gyroY, gyroZ;
         if(flag == 1){
             switch (event.sensor.getType()){
-                case Sensor.TYPE_LINEAR_ACCELERATION:
+                case Sensor.TYPE_ACCELEROMETER:
                 sensorX = event.values[0];
                 sensorY = event.values[1];
                 sensorZ = event.values[2];
@@ -171,12 +172,14 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
                             + " Y: " + sensorY + "\n"
                             + " Z: " + sensorZ;
                    globals.size++;
+                    String s = sensorX + "," + sensorY + "," + sensorZ;
                     accelText.setText(strTmp);
+                    globals.mobileRealdata.add(s);
                 break;
-                case  Sensor.TYPE_ACCELEROMETER:
-                    String s = event.values[0] + "," + event.values[1] + "," + event.values[2];
-                    globals.watchTimestamp.add(s);
-                    break;
+//                case  Sensor.TYPE_ACCELEROMETER:
+//                    String s = event.values[0] + "," + event.values[1] + "," + event.values[2];
+//                    globals.watchTimestamp.add(s);
+//                    break;
 
                 case Sensor.TYPE_GYROSCOPE:
                 gyroX = event.values[0];

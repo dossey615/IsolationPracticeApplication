@@ -70,6 +70,8 @@ public class Globals extends Application {
         mobileX.clear();
         mobileY.clear();
         mobileZ.clear();
+        mobileRealdata.clear();
+        watchrealData.clear();
         watchTimestamp.clear();
         mobileTimestamp.clear();
 
@@ -94,6 +96,8 @@ public class Globals extends Application {
         watchX.add((float)0);
         watchY.add((float)0);
         watchZ.add((float)0);
+        watchrealData.add("0,0,0");
+        mobileRealdata.add("0,0,0");
 
         //加速度から算出した速度
         speed = 0;
@@ -110,7 +114,7 @@ public class Globals extends Application {
     }
 
     public void getWatchData(String save){
-        String[] data = save.split(",", 0);
+        String[] data = save.split(",", 5);
         float x = Float.parseFloat(data[1]);
         float y = Float.parseFloat(data[2]);
         float z = Float.parseFloat(data[3]);
@@ -118,6 +122,7 @@ public class Globals extends Application {
         watchX.add(x);
         watchY.add(y);
         watchZ.add(z);
+        watchrealData.add(data[4]);
 
 //        watchX.add(CalculationDisplacement(x,oldAccel_WX,timeSpan,oldSpeed_WX,differenceWX,3));
 //        watchY.add(CalculationDisplacement(y,oldAccel_WY,timeSpan,oldSpeed_WY,differenceWY,4));
@@ -125,9 +130,15 @@ public class Globals extends Application {
     }
 
     public void mobileAccelDataSet(float x, float y, float z,long stamp){
-        mobileX.add(String.valueOf(x));
-        mobileY.add(String.valueOf(y));
-        mobileZ.add(String.valueOf(z));
+        oldAccel_X = lowpassfilter(oldAccel_X,x);
+        oldAccel_Y = lowpassfilter(oldAccel_Y,y);
+        oldAccel_Z = lowpassfilter(oldAccel_Z,z);
+
+
+
+        mobileX.add(String.valueOf(highPassFilter(oldAccel_X,x)));
+        mobileY.add(String.valueOf(highPassFilter(oldAccel_Y,y)));
+        mobileZ.add(String.valueOf(highPassFilter(oldAccel_Z,z)));
         mobileTimestamp.add(String.valueOf(stamp));
         //スマホの値をそれぞれセット
 //        mobileX.add(CalculationDisplacement(noiseClear(x),oldAccel_X,timeSpan,oldSpeed_X,differenceX,0));
@@ -216,18 +227,18 @@ public class Globals extends Application {
 
 
     public float highPassFilter(float value1, float value2){
-        value1 = value2 - lowpassfilter(value1,value2);
-        return value1;
+        value2 = value2 - value1;
+        return value2;
     }
 
     public float lowpassfilter(float value1, float value2){
-        value1 = (float)(value1 * 0.9 + value2 * 0.1);
+        value1 = value2 * 0.1f + value1 * (1.0f - 0.1f);
         return value1;
     }
 
     public int compasionSize(){
-        int minSize = mobileTimestamp.size();
-        if(minSize > watchData.size())minSize = watchData.size();
+        int minSize = mobileX.size();
+        if(minSize > watchX.size())minSize = watchX.size();
         return minSize;
     }
 
