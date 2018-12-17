@@ -1,5 +1,6 @@
 package com.example.dosshi.isolationpracticeapplication;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
@@ -46,6 +47,9 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
     private Sensor accel;
     private Sensor gyro;
     private int count = 0;
+    private int moveflag = 0;
+    private ProgressDialog progressDialog;
+
 
     private SimpleDateFormat timeFormat =
             new SimpleDateFormat("mm:ss.SSS", Locale.US);
@@ -67,6 +71,12 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
         prTimeText = findViewById(R.id.timeView);
         accelText = findViewById(R.id.accel);
         gyroText = findViewById(R.id.gyroscope);
+
+        //プログレスダイアログのセット
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setMessage("処理を実行中しています\n少々お待ちください");
+        progressDialog.setCancelable(true);
 
         //加速度用のプログラム実装
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
@@ -110,7 +120,7 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
             // Listenerの登録
             accel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
             gyro = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
-            sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_NORMAL);
+            sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_FASTEST);
             sensorManager.registerListener(this, gyro, SensorManager.SENSOR_DELAY_NORMAL);
 
     }
@@ -144,11 +154,14 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
-        if(flag == 1) {
-            count++;
-            //Log.d("getWatchData", String.format("SUM:%f",count));
+        if(moveflag == 1000){
+            progressDialog.dismiss();
+            Intent intent = new Intent(getApplication(), ResultActivity.class);
+            startActivity(intent);
+        }else {
             globals.getWatchData(messageEvent.getPath());
             watchResult.add(messageEvent.getPath());
+            moveflag++;
         }
     }
 
@@ -158,6 +171,7 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
 
         float sensorX, sensorY, sensorZ;
         float gyroX, gyroY, gyroZ;
+        if(flag == 2)sensorManager.unregisterListener(this);
         if(flag == 1){
             switch (event.sensor.getType()){
                 case Sensor.TYPE_ACCELEROMETER:
@@ -219,8 +233,9 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
                 timerText.setText("finish");
                 timerText.setVisibility(View.INVISIBLE);
                 globals.watchDataSet(watchResult);
-                Intent intent = new Intent(getApplication(), ResultActivity.class);
-                startActivity(intent);
+                vibrator.cancel();
+                flag = 2;
+                progressDialog.show();
             }
         }
 
