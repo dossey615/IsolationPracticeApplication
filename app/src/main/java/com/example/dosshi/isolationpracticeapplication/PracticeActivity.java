@@ -172,7 +172,7 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
         float sensorX, sensorY, sensorZ;
         float gyroX, gyroY, gyroZ;
         if(flag == 2)sensorManager.unregisterListener(this);
-        if(flag == 1){
+        if(flag == 1 && count%2 == 0){
             switch (event.sensor.getType()){
                 case Sensor.TYPE_ACCELEROMETER:
                 sensorX = event.values[0];
@@ -207,6 +207,7 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
                 break;
             }
         }
+        count++;
     }
 
     /*--以下はタイマーメソッドの実装--*/

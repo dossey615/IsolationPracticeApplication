@@ -41,7 +41,10 @@
             android:name=".ResultActivity"
             android:label="ResultData"
             android:screenOrientation="portrait" />
-        <activity android:name=".ChartsActivity"/>
+        <activity android:name=".ChartsActivity" />
+        <activity android:name=".SampleVideoActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

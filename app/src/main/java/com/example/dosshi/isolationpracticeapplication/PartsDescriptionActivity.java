@@ -52,8 +52,20 @@ public class PartsDescriptionActivity extends AppCompatActivity {
 
         //時間のスピナー表示
         Button stbutton = findViewById(R.id.start_assist);
+        Button examplebutton = findViewById(R.id.example);
+
         startButton(stbutton);
+        exampleButton(examplebutton);
         initSpinners();
+    }
+
+    private void exampleButton(Button button){
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                final Intent intent = new Intent(getApplication(),SampleVideoActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void startButton(Button button) {
