@@ -1,10 +1,14 @@
 package com.example.dosshi.isolationpracticeapplication;
 
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -19,12 +23,21 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class ChartsActivity extends AppCompatActivity {
 
     private LineChart mChart;
     private Globals globals;
+    private HistoryData hisdata = new HistoryData();
+    private int size = 0;
+    private int hisflag = 0;
+    private ArrayList<String> keys = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +69,6 @@ public class ChartsActivity extends AppCompatActivity {
             }
         });
         globals = (Globals)this.getApplication();
-        loadhistry();
         initCharts(0);
     }
 
@@ -113,7 +125,8 @@ public class ChartsActivity extends AppCompatActivity {
                             String date = (String) dataSnapshot.child("Date").getValue();
                             String url = (String) dataSnapshot.child("URL").getValue();
                             globals.setHistoryData(date,url);
-
+                            size++;
+                            keys.add(date);
                             Log.d("Firebase", String.format("date:%s, url:%s", date, url));
 
                         }
@@ -132,6 +145,9 @@ public class ChartsActivity extends AppCompatActivity {
         ArrayList<Entry> mobileAccelval_X = new ArrayList<>();
         ArrayList<Entry> mobileAccelval_Y = new ArrayList<>();
         ArrayList<Entry> mobileAccelval_Z = new ArrayList<>();
+        ArrayList<Entry> watchAccelval_X = new ArrayList<>();
+        ArrayList<Entry> watchAccelval_Y = new ArrayList<>();
+        ArrayList<Entry> watchAccelval_Z = new ArrayList<>();
         ArrayList<String> timestamp = new ArrayList<>();
 
         if(flag == 0) {
@@ -141,35 +157,47 @@ public class ChartsActivity extends AppCompatActivity {
                 mobileAccelval_Z.add(new Entry(i, Float.parseFloat((String) globals.mobileZ.get(i))));
                 timestamp.add((String)globals.mobileTimestamp.get(i));
             }
-        }else{
+            for(int i = 0; i < hisdata.dataSize(); i++){
+                watchAccelval_X.add(new Entry(i, hisdata.mobX.get(i)));
+                watchAccelval_Y.add(new Entry(i, hisdata.mobY.get(i)));
+                watchAccelval_Z.add(new Entry(i, hisdata.mobZ.get(i)));
+            }
+        }else if(flag == 1) {
             for (int i = 0; i < globals.watchX.size(); i++) {
-                mobileAccelval_X.add(new Entry(i, (float)globals.watchX.get(i)));
-                mobileAccelval_Y.add(new Entry(i, (float)globals.watchY.get(i)));
-                mobileAccelval_Z.add(new Entry(i, (float)globals.watchZ.get(i)));
+                mobileAccelval_X.add(new Entry(i, (float) globals.watchX.get(i)));
+                mobileAccelval_Y.add(new Entry(i, (float) globals.watchY.get(i)));
+                mobileAccelval_Z.add(new Entry(i, (float) globals.watchZ.get(i)));
+            }
+            for(int i = 0; i < hisdata.dataSize(); i++){
+                watchAccelval_X.add(new Entry(i, hisdata.watX.get(i)));
+                watchAccelval_Y.add(new Entry(i, hisdata.watY.get(i)));
+                watchAccelval_Z.add(new Entry(i, hisdata.watZ.get(i)));
             }
         }
 
         LineDataSet set1;
         LineDataSet set2;
         LineDataSet set3;
+        LineDataSet set4;
+        LineDataSet set5;
+        LineDataSet set6;
 
-//        if (mChart.getData() != null &&
-//                mChart.getData().getDataSetCount() > 0) {
-//
-//            set1 = (LineDataSet) mChart.getData().getDataSetByIndex(0);
-//            set1.setValues(mobileAccelval_X);
-//            mChart.getData().notifyDataChanged();
-//            mChart.notifyDataSetChanged();
-//        } else {
+
             // create a dataset and give it a type
-            set1 = new LineDataSet(mobileAccelval_X, "軸部X");
-            set2 = new LineDataSet(mobileAccelval_Y, "軸部Y");
-            set3 = new LineDataSet(mobileAccelval_Z, "軸部Z");
+            set1 = new LineDataSet(mobileAccelval_X, "X");
+            set2 = new LineDataSet(mobileAccelval_Y, "Y");
+            set3 = new LineDataSet(mobileAccelval_Z, "Z");
+            set4 = new LineDataSet(watchAccelval_X, "比較X");
+            set5 = new LineDataSet(watchAccelval_Y, "比較Y");
+            set6 = new LineDataSet(watchAccelval_Z, "比較Z");
 
             ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
             dataSets.add(setCharts(set1,Color.RED)); // add the datasets
             dataSets.add(setCharts(set2,Color.BLUE)); // add the datasets
             dataSets.add(setCharts(set3,Color.GREEN)); // add the datasets
+            dataSets.add(setCharts(set4,Color.MAGENTA)); // add the datasets
+            dataSets.add(setCharts(set5,Color.CYAN)); // add the datasets
+            dataSets.add(setCharts(set6,Color.LTGRAY)); //
 
             // create a data object with the datasets
             LineData lineData = new LineData(dataSets);
@@ -190,5 +218,91 @@ public class ChartsActivity extends AppCompatActivity {
         set.setFormSize(15.f);
 
         return  set;
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        loadhistry();
+        return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_radio1) {
+            hisdata.clear();
+            initCharts(0);
+        } else if (item.getItemId() == R.id.action_radio2) {
+            if(size>=2){
+                load(keys.get(size - 2));
+                initCharts(0);
+            }else{
+                toast();
+            }
+        } else if (item.getItemId() == R.id.action_radio3) {
+            if(size>=3){
+                load(keys.get(size - 3));
+                initCharts(0);
+            }else{
+                toast();
+            }
+        } else if (item.getItemId() == R.id.action_radio4) {
+            if(size >=4){
+                load(keys.get(size - 4));
+                initCharts(0);
+            }else{
+                toast();
+            }
+        } else if (item.getItemId() == R.id.action_radio5) {
+            if(size>=4){
+                load(keys.get(size - 5));
+                initCharts(0);
+            }else{
+                toast();
+            }
+        } else if (item.getItemId() == R.id.action_radio6) {
+            exampleload();
+            initCharts(0);
+        }
+        return true;
+    }
+
+    public void load(String name){
+        hisdata.clear();
+        try{
+            FileInputStream in = openFileInput( name + ".csv" );
+            BufferedReader reader = new BufferedReader( new InputStreamReader( in , "UTF-8") );
+            String str = "";
+            String tmp;
+            int flag = 0;
+            while( (tmp = reader.readLine()) != null ){
+                if(flag != 1)flag = 1;
+                else hisdata.setData(tmp.split(","));
+            }
+            reader.close();
+        }catch( IOException e ){
+            e.printStackTrace();
+        }
+    }
+    public void exampleload(){
+        try{
+        hisdata.clear();
+        Resources res = this.getResources();
+        InputStream in2 = res.openRawResource(R.raw.master);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in2));
+        String str = "";
+        String tmp;
+        int flag = 0;
+        while( (tmp = reader.readLine()) != null ){
+                if(flag != 1)flag = 1;
+                else hisdata.setData(tmp.split(","));
+            }
+            reader.close();
+        }catch( IOException e ){
+            e.printStackTrace();
+        }
+    }
+
+    public void toast() {
+        Toast toast = Toast.makeText(ChartsActivity.this, "履歴が存在しません", Toast.LENGTH_SHORT);
+        toast.show();
     }
 }

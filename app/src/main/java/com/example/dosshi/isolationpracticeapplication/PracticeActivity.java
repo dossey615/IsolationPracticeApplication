@@ -121,7 +121,7 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
             accel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
             gyro = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
             sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_FASTEST);
-            sensorManager.registerListener(this, gyro, SensorManager.SENSOR_DELAY_NORMAL);
+            sensorManager.registerListener(this, gyro, SensorManager.SENSOR_DELAY_FASTEST);
 
     }
 
@@ -172,7 +172,7 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
         float sensorX, sensorY, sensorZ;
         float gyroX, gyroY, gyroZ;
         if(flag == 2)sensorManager.unregisterListener(this);
-        if(flag == 1 && count%2 == 0){
+        if(flag == 1 ){
             switch (event.sensor.getType()){
                 case Sensor.TYPE_ACCELEROMETER:
                 sensorX = event.values[0];
@@ -186,15 +186,8 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
                             + " Y: " + sensorY + "\n"
                             + " Z: " + sensorZ;
                    globals.size++;
-                    String s = sensorX + "," + sensorY + "," + sensorZ;
                     accelText.setText(strTmp);
-                    globals.mobileRealdata.add(s);
                 break;
-//                case  Sensor.TYPE_ACCELEROMETER:
-//                    String s = event.values[0] + "," + event.values[1] + "," + event.values[2];
-//                    globals.watchTimestamp.add(s);
-//                    break;
-
                 case Sensor.TYPE_GYROSCOPE:
                 gyroX = event.values[0];
                 gyroY = event.values[1];
@@ -204,6 +197,8 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
                             + " Y: " + gyroY + "\n"
                             + " Z: " + gyroZ;
                     gyroText.setText(gyroTmp);
+                    String s = gyroX + "," + gyroY + "," + gyroZ;
+                    globals.mobileRealdata.add(s);
                 break;
             }
         }
@@ -236,6 +231,7 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
                 globals.watchDataSet(watchResult);
                 vibrator.cancel();
                 flag = 2;
+                //Intent intent = new Intent(getApplication(), ResultActivity.class);
                 progressDialog.show();
             }
         }

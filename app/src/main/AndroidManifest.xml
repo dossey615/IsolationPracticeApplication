@@ -6,12 +6,15 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+
 
     <application
         android:name=".Globals"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:gravity="center"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -35,13 +38,15 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".PracticeActivity"
-            android:label="PracticeActivity"
+            android:label="アイソレーション測定"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ResultActivity"
-            android:label="ResultData"
+            android:label="練習終了！"
             android:screenOrientation="portrait" />
-        <activity android:name=".ChartsActivity" />
+        <activity
+            android:name=".ChartsActivity"
+            android:label="アイソレーショングラフ"/>
         <activity android:name=".SampleVideoActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         </activity>

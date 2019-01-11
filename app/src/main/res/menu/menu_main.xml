@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/histry"
+        android:icon="@android:drawable/ic_menu_recent_history"
+        app:showAsAction="ifRoom">
+        <menu>
+            <item
+                android:id="@+id/action_radio1"
+                android:title="今回"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_radio2"
+                android:title="前回"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_radio3"
+                android:title="2回前"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_radio4"
+                android:title="3回前"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_radio5"
+                android:title="4回前"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_radio6"
+                android:title="上級者"
+                app:showAsAction="never" />
+        </menu>
+    </item>
+</menu>

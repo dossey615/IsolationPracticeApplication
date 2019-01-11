@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">IsolaSprt</string>
-    <string name="app_select">SelectParts</string>
-    <string name="app_description">DescriotionSet</string>
+    <string name="app_name">タイトル</string>
+    <string name="app_select">部位選択</string>
+    <string name="app_description">練習説明</string>
     <string name="use">使い方</string>
     <string name="start">アイソレーション測定開始</string>
     <string name="image">TODO</string>
@@ -18,6 +18,8 @@
     <string name="backtop">タイトルに戻る</string>
     <string name="part1">軸部の結果</string>
     <string name="moveParts">可動部の結果</string>
+    <string name="えお">えお</string>
+    <string name="histry">histry</string>
 
     <!--<string-array name="sort_spinner_item1">-->
     <!--<item name="key">５秒</item>-->

@@ -45,7 +45,7 @@ public class ResultActivity extends AppCompatActivity {
         //現在日時を取得する
         Calendar cal = Calendar.getInstance();
         //フォーマットパターンを指定して表示する
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd_E_HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd_HHmmss");
         date = sdf.format(cal.getTime());
 
         //UIのデータを取得
@@ -92,9 +92,9 @@ public class ResultActivity extends AppCompatActivity {
             fileWriter = new FileWriter(file);
             fileWriter.write(
                     "Mobiletimestamp,MobileAccl_X,MobileAccl_Y,MobileAccl_Z,"
-                            + "MobileRealAccl_X,MobileRealAccl_Y,MobileRealAccl_Z, "
+                            + "MobileGyro_X,MobileGyro_Y,MobileGyro_Z, "
                             + "Watchtimestamp,Watch_X,Watch_Y,Watch_Z,"
-                            + "WatchReal_X,WatchReal_Y,WatchReal_Z"
+                            + "WatchGyro_X,WatchGyro_Y,WatchGyro_Z"
                             + "\n"
             );
             int size = globals.compasionSize();

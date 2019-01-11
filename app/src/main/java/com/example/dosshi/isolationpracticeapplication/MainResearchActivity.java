@@ -17,6 +17,7 @@ public class MainResearchActivity extends AppCompatActivity{
 
         super.onCreate(savedInstanceState);
 
+
         // ここで1秒間スリープし、スプラッシュを表示させたままにする。
         try {
             Thread.sleep(1000);
@@ -39,5 +40,6 @@ public class MainResearchActivity extends AppCompatActivity{
             }
         });
     }
+
 }
 

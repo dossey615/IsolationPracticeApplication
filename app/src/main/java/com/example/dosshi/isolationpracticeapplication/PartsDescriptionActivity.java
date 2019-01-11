@@ -7,9 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -56,7 +54,7 @@ public class PartsDescriptionActivity extends AppCompatActivity {
 
         startButton(stbutton);
         exampleButton(examplebutton);
-        initSpinners();
+
     }
 
     private void exampleButton(Button button){
@@ -95,23 +93,6 @@ public class PartsDescriptionActivity extends AppCompatActivity {
             }
         });
     }
-
-
-    private void initSpinners() {
-        Spinner spinner1 = (Spinner)findViewById(R.id.Spinner01);
-        String[] labels = getResources().getStringArray(R.array.time_array);
-        ArrayAdapter<String> adapter
-                = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, labels);
-        spinner1.setAdapter(adapter);
-
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-    }
-
-    public void onClick_Button1(View view){
-        Spinner spinner1 = (Spinner)findViewById(R.id.Spinner01);
-        String str = spinner1.getSelectedItem().toString();
-    }
-
 
     @Override
     protected void onResume() {
