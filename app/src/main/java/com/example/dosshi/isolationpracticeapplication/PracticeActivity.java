@@ -47,6 +47,7 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
     private Sensor accel;
     private Sensor gyro;
     private int count = 0;
+    private int count2 = 0;
     private int moveflag = 0;
     private ProgressDialog progressDialog;
 
@@ -154,7 +155,7 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
-        if(moveflag == 1000){
+        if(moveflag >= 999){
             progressDialog.dismiss();
             Intent intent = new Intent(getApplication(), ResultActivity.class);
             startActivity(intent);
@@ -172,37 +173,43 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
         float sensorX, sensorY, sensorZ;
         float gyroX, gyroY, gyroZ;
         if(flag == 2)sensorManager.unregisterListener(this);
-        if(flag == 1 ){
+        if(flag == 1){
             switch (event.sensor.getType()){
-                case Sensor.TYPE_ACCELEROMETER:
-                sensorX = event.values[0];
-                sensorY = event.values[1];
-                sensorZ = event.values[2];
-                globals.mobileAccelDataSet(sensorX, sensorY, sensorZ,event.timestamp);
-                    if(sensorX > 8 || sensorZ > 4 ) vibrator.vibrate(100);
-                    else vibrator.cancel();
-                    String strTmp = "加速度センサー\n"
-                            + " X: " + sensorX + "\n"
-                            + " Y: " + sensorY + "\n"
-                            + " Z: " + sensorZ;
-                   globals.size++;
-                    accelText.setText(strTmp);
-                break;
+                    case Sensor.TYPE_ACCELEROMETER:
+                        if(count % 2 == 0) {
+                            sensorX = event.values[0];
+                            sensorY = event.values[1];
+                            sensorZ = event.values[2];
+                            globals.mobileAccelDataSet(sensorX, sensorY, sensorZ, event.timestamp);
+                            if (sensorX > 8 || sensorZ > 4) vibrator.vibrate(100);
+                            else vibrator.cancel();
+                            String strTmp = "加速度センサー\n"
+                                    + " X: " + sensorX + "\n"
+                                    + " Y: " + sensorY + "\n"
+                                    + " Z: " + sensorZ;
+                            globals.size++;
+                            accelText.setText(strTmp);
+                        }
+                        count++;
+                    break;
                 case Sensor.TYPE_GYROSCOPE:
-                gyroX = event.values[0];
-                gyroY = event.values[1];
-                gyroZ = event.values[2];
-                    String gyroTmp = "ジャイロセンサー\n"
-                            + " X: " + gyroX + "\n"
-                            + " Y: " + gyroY + "\n"
-                            + " Z: " + gyroZ;
-                    gyroText.setText(gyroTmp);
-                    String s = gyroX + "," + gyroY + "," + gyroZ;
-                    globals.mobileRealdata.add(s);
-                break;
+                    if(count2 % 2 == 0) {
+                        gyroX = event.values[0];
+                        gyroY = event.values[1];
+                        gyroZ = event.values[2];
+                        String gyroTmp = "ジャイロセンサー\n"
+                                + " X: " + gyroX + "\n"
+                                + " Y: " + gyroY + "\n"
+                                + " Z: " + gyroZ;
+                        gyroText.setText(gyroTmp);
+                        String s = gyroX + "," + gyroY + "," + gyroZ;
+                        globals.mobileRealdata.add(s);
+                    }
+                    count2++;
+                    break;
             }
+
         }
-        count++;
     }
 
     /*--以下はタイマーメソッドの実装--*/

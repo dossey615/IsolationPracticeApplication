@@ -28,10 +28,12 @@ public class MeasureActivity extends WearableActivity  implements SensorEventLis
     private TextView gyroText;
     private TextView msgText;
     private SensorManager sensorManager;
+    private String s;
     private String SEND_DATA;
     private String mNode;
     private String realdata;
     private ArrayList <String> WatchDataSet = new ArrayList<>();
+    private ArrayList <String> WatchDataSet2 = new ArrayList<>();
     private Timer time = new Timer(false);
     private long timestamp;
     private  int flag = 0;
@@ -41,6 +43,7 @@ public class MeasureActivity extends WearableActivity  implements SensorEventLis
     private float gravityX = 0;
     private float gravityY = 0;
     private float gravityZ = 0;
+    private int count2 = 0;
     private float gyroX = 0;
     private float gyroY = 0;
     private float gyroZ = 0;
@@ -128,23 +131,40 @@ public class MeasureActivity extends WearableActivity  implements SensorEventLis
         if (flag == 1) {
                 accelText.setText("計測");
                 float sensorX, sensorY, sensorZ;
-                if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-                    gravityX = lowpassfilter(gravityX, event.values[0]);
-                    gravityY = lowpassfilter(gravityY, event.values[1]);
-                    gravityZ = lowpassfilter(gravityZ, event.values[2]);
+                switch (event.sensor.getType()) {
+                    case Sensor.TYPE_ACCELEROMETER:
+                        if (count <= 1000) {
+                            gravityX = lowpassfilter(gravityX, event.values[0]);
+                            gravityY = lowpassfilter(gravityY, event.values[1]);
+                            gravityZ = lowpassfilter(gravityZ, event.values[2]);
 
-                    sensorX = highPassFilter(gravityX, event.values[0]);
-                    sensorY = highPassFilter(gravityY, event.values[1]);
-                    sensorZ = highPassFilter(gravityZ, event.values[2]);
+                            sensorX = highPassFilter(gravityX, event.values[0]);
+                            sensorY = highPassFilter(gravityY, event.values[1]);
+                            sensorZ = highPassFilter(gravityZ, event.values[2]);
 
-                    realdata = event.values[0] + "," + event.values[1] + "," + event.values[2];
-                    SEND_DATA = event.timestamp + "," + sensorX + "," + sensorY + "," + sensorZ + "," + realdata;
-                    WatchDataSet.add(SEND_DATA);
-                    if (mNode != null && count == 1000) {
+                            SEND_DATA = event.timestamp + "," + sensorX + "," + sensorY + "," + sensorZ;
+                            WatchDataSet.add(SEND_DATA);
+                            count++;
+                        }
+                        break;
+
+                    case Sensor.TYPE_GYROSCOPE:
+                        if (count2 <= 1000) {
+                            gyroX = event.values[0];
+                            gyroY = event.values[1];
+                            gyroZ = event.values[2];
+                            s = gyroX + "," + gyroY + "," + gyroZ;
+                            WatchDataSet2.add(s);
+                            count2++;
+                        }
+                        break;
+                }
+                    if (mNode != null && count == 1000 && count2 == 1000) {
                         msgText.setText("計測終了！");
                         sensorManager.unregisterListener(this);
-                        for(int i = 0; i < WatchDataSet.size(); i++){
-                            Wearable.MessageApi.sendMessage(mGoogleApiClient, mNode, WatchDataSet.get(i), null).setResultCallback(new ResultCallback<MessageApi.SendMessageResult>() {
+                        for (int i = 0; i < WatchDataSet.size(); i++) {
+                            SEND_DATA = WatchDataSet.get(i)+ "," + WatchDataSet2.get(i);
+                            Wearable.MessageApi.sendMessage(mGoogleApiClient, mNode, SEND_DATA, null).setResultCallback(new ResultCallback<MessageApi.SendMessageResult>() {
                                 @Override
                                 public void onResult(MessageApi.SendMessageResult result) {
                                     if (!result.getStatus().isSuccess()) {
@@ -153,10 +173,7 @@ public class MeasureActivity extends WearableActivity  implements SensorEventLis
                                 }
                             });
                         }
-                    }else {
-                        count++;
                     }
-            }
         }
     }
 
