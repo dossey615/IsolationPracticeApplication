@@ -1,6 +1,7 @@
 package com.example.dosshi.isolationpracticeapplication;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.wearable.activity.WearableActivity;
@@ -26,6 +27,7 @@ public class DescriptionActivity extends WearableActivity implements GoogleApiCl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_description);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
         //GoogleApiClientインスタンス生成
         mGoogleApiClient = new GoogleApiClient.Builder(this)

@@ -1,10 +1,13 @@
 package com.example.dosshi.isolationpracticeapplication;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.support.wear.widget.BoxInsetLayout;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
 import android.widget.TextView;
@@ -24,6 +27,9 @@ public class MeasureActivity extends WearableActivity  implements SensorEventLis
     private static final String TAG = MeasureActivity.class.getName();
     private GoogleApiClient mGoogleApiClient;
 
+    private ColorDrawable colorDrawable;
+    private BoxInsetLayout con;
+
     private TextView accelText;
     private TextView gyroText;
     private TextView msgText;
@@ -32,6 +38,7 @@ public class MeasureActivity extends WearableActivity  implements SensorEventLis
     private String SEND_DATA;
     private String mNode;
     private String realdata;
+
     private ArrayList <String> WatchDataSet = new ArrayList<>();
     private ArrayList <String> WatchDataSet2 = new ArrayList<>();
     private Timer time = new Timer(false);
@@ -47,23 +54,30 @@ public class MeasureActivity extends WearableActivity  implements SensorEventLis
     private float gyroX = 0;
     private float gyroY = 0;
     private float gyroZ = 0;
+    private int temporaryColorInt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_measure);
+
         //センサーマネージャーを取得
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         //センサマネージャに TYPE_ACCELEROMETER(加速度センサ) を指定します。
         accel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         gyro = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
 
+
         accelText = (TextView) findViewById(R.id.accel);
         gyroText = (TextView) findViewById(R.id.gyro);
         msgText = (TextView) findViewById(R.id.textView4);
 
-        accelText.setText("用意");
+        con = (BoxInsetLayout)findViewById(R.id.BoxInsetLayou);
+        colorDrawable = (ColorDrawable)con.getBackground();
+        temporaryColorInt = colorDrawable.getColor();
 
+
+        accelText.setText("用意");
 
         // Enables Always-on
         setAmbientEnabled();
@@ -101,7 +115,7 @@ public class MeasureActivity extends WearableActivity  implements SensorEventLis
 
             @Override
             public void run() {
-                flag = 1;
+                flag = 3;
                 time.cancel();
             }
         };
@@ -128,21 +142,26 @@ public class MeasureActivity extends WearableActivity  implements SensorEventLis
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+        if (flag == 3){
+            accelText.setText("計測");
+            accelText.setTextSize(30);
+            con.setBackgroundColor(Color.GREEN);
+            flag = 1;
+        }
         if (flag == 1) {
-                accelText.setText("計測");
                 float sensorX, sensorY, sensorZ;
                 switch (event.sensor.getType()) {
                     case Sensor.TYPE_ACCELEROMETER:
                         if (count <= 1000) {
-                            gravityX = lowpassfilter(gravityX, event.values[0]);
-                            gravityY = lowpassfilter(gravityY, event.values[1]);
-                            gravityZ = lowpassfilter(gravityZ, event.values[2]);
+//                            gravityX = lowpassfilter(gravityX, event.values[0]);
+//                            gravityY = lowpassfilter(gravityY, event.values[1]);
+//                            gravityZ = lowpassfilter(gravityZ, event.values[2]);
+//
+//                            sensorX = highPassFilter(gravityX, event.values[0]);
+//                            sensorY = highPassFilter(gravityY, event.values[1]);
+//                            sensorZ = highPassFilter(gravityZ, event.values[2]);
 
-                            sensorX = highPassFilter(gravityX, event.values[0]);
-                            sensorY = highPassFilter(gravityY, event.values[1]);
-                            sensorZ = highPassFilter(gravityZ, event.values[2]);
-
-                            SEND_DATA = event.timestamp + "," + sensorX + "," + sensorY + "," + sensorZ;
+                            SEND_DATA = event.timestamp + "," + event.values[0] + "," + event.values[1] + "," + event.values[2];
                             WatchDataSet.add(SEND_DATA);
                             count++;
                         }
@@ -150,17 +169,15 @@ public class MeasureActivity extends WearableActivity  implements SensorEventLis
 
                     case Sensor.TYPE_GYROSCOPE:
                         if (count2 <= 1000) {
-                            gyroX = event.values[0];
-                            gyroY = event.values[1];
-                            gyroZ = event.values[2];
-                            s = gyroX + "," + gyroY + "," + gyroZ;
-                            WatchDataSet2.add(s);
+                            WatchDataSet2.add(event.values[0]+ "," + event.values[1] + "," + event.values[2]);
                             count2++;
                         }
                         break;
                 }
                     if (mNode != null && count == 1000 && count2 == 1000) {
+
                         msgText.setText("計測終了！");
+                        con.setBackgroundColor(Color.RED);
                         sensorManager.unregisterListener(this);
                         for (int i = 0; i < WatchDataSet.size(); i++) {
                             SEND_DATA = WatchDataSet.get(i)+ "," + WatchDataSet2.get(i);

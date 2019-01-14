@@ -3,6 +3,7 @@ package com.example.dosshi.isolationpracticeapplication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -23,6 +24,7 @@ public class MainResearchActivity extends AppCompatActivity{
             Thread.sleep(1000);
         } catch (InterruptedException e) {
         }
+
         // スプラッシュthemeを通常themeに変更する
         setTheme(R.style.AppTheme);
         setContentView(R.layout.activity_main_reaearch);
@@ -39,6 +41,12 @@ public class MainResearchActivity extends AppCompatActivity{
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
 }

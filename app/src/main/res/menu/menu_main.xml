@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/help"
+        android:orderInCategory="100"
+        android:title="@string/histry"
+        android:icon="@android:drawable/ic_menu_help"
+        app:showAsAction="ifRoom">
+    </item>
+    <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/histry"
@@ -33,4 +40,5 @@
                 app:showAsAction="never" />
         </menu>
     </item>
+
 </menu>

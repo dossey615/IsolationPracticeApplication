@@ -1,6 +1,7 @@
 package com.example.dosshi.isolationpracticeapplication;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
 import android.view.View;
@@ -13,6 +14,7 @@ public class MainActivity extends WearableActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Button start = findViewById(R.id.start);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
         // Enables Always-on
         setAmbientEnabled();

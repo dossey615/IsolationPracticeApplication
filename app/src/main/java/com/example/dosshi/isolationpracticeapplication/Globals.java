@@ -22,9 +22,9 @@ public class Globals extends Application {
     ArrayList mobileY = new ArrayList();
     ArrayList mobileZ = new ArrayList();
 
-    ArrayList watchX = new ArrayList();
-    ArrayList watchY = new ArrayList();
-    ArrayList watchZ = new ArrayList();
+    ArrayList<Float> watchX = new ArrayList<>();
+    ArrayList<Float> watchY = new ArrayList<>();
+    ArrayList<Float> watchZ = new ArrayList<>();
     ArrayList mobileTimestamp = new ArrayList();
     ArrayList<String> watchTimestamp = new ArrayList<>();
     ArrayList<String> watchrealData= new ArrayList<>();
@@ -35,6 +35,10 @@ public class Globals extends Application {
     float oldAccel_X = 0;
     float oldAccel_Y = 0;
     float oldAccel_Z = 0;
+    float watcholdAccel_X = 0;
+    float watcholdAccel_Y = 0;
+    float watcholdAccel_Z = 0;
+
 
     //加速度から算出した速度
     float speed = 0;
@@ -92,10 +96,14 @@ public class Globals extends Application {
         float x = Float.parseFloat(data[1]);
         float y = Float.parseFloat(data[2]);
         float z = Float.parseFloat(data[3]);
+        watcholdAccel_X = lowpassfilter(watcholdAccel_X,x);
+        watcholdAccel_Y = lowpassfilter(watcholdAccel_Y,y);
+        watcholdAccel_Z = lowpassfilter(watcholdAccel_Z,z);
+
         watchTimestamp.add(data[0]);
-        watchX.add(x);
-        watchY.add(y);
-        watchZ.add(z);
+        watchX.add(highPassFilter(watcholdAccel_X,x));
+        watchY.add(highPassFilter(watcholdAccel_Y,y));
+        watchZ.add(highPassFilter(watcholdAccel_Z,z));
         watchrealData.add(data[4]);
     }
 
@@ -103,8 +111,6 @@ public class Globals extends Application {
         oldAccel_X = lowpassfilter(oldAccel_X,x);
         oldAccel_Y = lowpassfilter(oldAccel_Y,y);
         oldAccel_Z = lowpassfilter(oldAccel_Z,z);
-
-
 
         mobileX.add(String.valueOf(highPassFilter(oldAccel_X,x)));
         mobileY.add(String.valueOf(highPassFilter(oldAccel_Y,y)));

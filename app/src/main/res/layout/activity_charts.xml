@@ -10,7 +10,7 @@
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/line_chart"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="425dp"
         android:layout_marginBottom="50dp"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -49,16 +49,16 @@
 
     <Button
         android:id="@+id/all"
-        android:layout_width="181dp"
-        android:layout_height="wrap_content"
+        android:layout_width="180dp"
+        android:layout_height="50dp"
         android:text="Button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/zdata"
-        android:layout_width="181dp"
-        android:layout_height="44dp"
+        android:layout_width="180dp"
+        android:layout_height="50dp"
         android:text="Button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

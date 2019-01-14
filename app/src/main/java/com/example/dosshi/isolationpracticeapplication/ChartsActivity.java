@@ -152,26 +152,26 @@ public class ChartsActivity extends AppCompatActivity {
 
         if(flag == 0) {
             for (int i = 0; i < globals.mobileX.size(); i++) {
-                mobileAccelval_X.add(new Entry(i, Float.parseFloat((String) globals.mobileX.get(i))));
+//                mobileAccelval_X.add(new Entry(i, Float.parseFloat((String) globals.mobileX.get(i))));
                 mobileAccelval_Y.add(new Entry(i, Float.parseFloat((String) globals.mobileY.get(i))));
-                mobileAccelval_Z.add(new Entry(i, Float.parseFloat((String) globals.mobileZ.get(i))));
+//                mobileAccelval_Z.add(new Entry(i, Float.parseFloat((String) globals.mobileZ.get(i))));
                 timestamp.add((String)globals.mobileTimestamp.get(i));
             }
             for(int i = 0; i < hisdata.dataSize(); i++){
-                watchAccelval_X.add(new Entry(i, hisdata.mobX.get(i)));
+//                watchAccelval_X.add(new Entry(i, hisdata.mobX.get(i)));
                 watchAccelval_Y.add(new Entry(i, hisdata.mobY.get(i)));
-                watchAccelval_Z.add(new Entry(i, hisdata.mobZ.get(i)));
+//                watchAccelval_Z.add(new Entry(i, hisdata.mobZ.get(i)));
             }
         }else if(flag == 1) {
             for (int i = 0; i < globals.watchX.size(); i++) {
-                mobileAccelval_X.add(new Entry(i, (float) globals.watchX.get(i)));
+//                mobileAccelval_X.add(new Entry(i, (float) globals.watchX.get(i)));
                 mobileAccelval_Y.add(new Entry(i, (float) globals.watchY.get(i)));
-                mobileAccelval_Z.add(new Entry(i, (float) globals.watchZ.get(i)));
+//                mobileAccelval_Z.add(new Entry(i, (float) globals.watchZ.get(i)));
             }
             for(int i = 0; i < hisdata.dataSize(); i++){
-                watchAccelval_X.add(new Entry(i, hisdata.watX.get(i)));
+//                watchAccelval_X.add(new Entry(i, hisdata.watX.get(i)));
                 watchAccelval_Y.add(new Entry(i, hisdata.watY.get(i)));
-                watchAccelval_Z.add(new Entry(i, hisdata.watZ.get(i)));
+//                watchAccelval_Z.add(new Entry(i, hisdata.watZ.get(i)));
             }
         }
 
@@ -184,20 +184,20 @@ public class ChartsActivity extends AppCompatActivity {
 
 
             // create a dataset and give it a type
-            set1 = new LineDataSet(mobileAccelval_X, "X");
-            set2 = new LineDataSet(mobileAccelval_Y, "Y");
-            set3 = new LineDataSet(mobileAccelval_Z, "Z");
-            set4 = new LineDataSet(watchAccelval_X, "比較X");
-            set5 = new LineDataSet(watchAccelval_Y, "比較Y");
-            set6 = new LineDataSet(watchAccelval_Z, "比較Z");
+//            set1 = new LineDataSet(mobileAccelval_X, "X");
+            set2 = new LineDataSet(mobileAccelval_Y, "今回のY軸");
+//            set3 = new LineDataSet(mobileAccelval_Z, "Z");
+//            set4 = new LineDataSet(watchAccelval_X, "比較X");
+            set5 = new LineDataSet(watchAccelval_Y, "比較用のY軸");
+//            set6 = new LineDataSet(watchAccelval_Z, "比較Z");
 
             ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
-            dataSets.add(setCharts(set1,Color.RED)); // add the datasets
+//            dataSets.add(setCharts(set1,Color.RED)); // add the datasets
             dataSets.add(setCharts(set2,Color.BLUE)); // add the datasets
-            dataSets.add(setCharts(set3,Color.GREEN)); // add the datasets
-            dataSets.add(setCharts(set4,Color.MAGENTA)); // add the datasets
+//            dataSets.add(setCharts(set3,Color.GREEN)); // add the datasets
+//            dataSets.add(setCharts(set4,Color.MAGENTA)); // add the datasets
             dataSets.add(setCharts(set5,Color.CYAN)); // add the datasets
-            dataSets.add(setCharts(set6,Color.LTGRAY)); //
+//            dataSets.add(setCharts(set6,Color.LTGRAY)); //
 
             // create a data object with the datasets
             LineData lineData = new LineData(dataSets);
@@ -219,12 +219,7 @@ public class ChartsActivity extends AppCompatActivity {
 
         return  set;
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        loadhistry();
-        return super.onCreateOptionsMenu(menu);
-    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_radio1) {
@@ -304,5 +299,12 @@ public class ChartsActivity extends AppCompatActivity {
     public void toast() {
         Toast toast = Toast.makeText(ChartsActivity.this, "履歴が存在しません", Toast.LENGTH_SHORT);
         toast.show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        loadhistry();
+        return super.onCreateOptionsMenu(menu);
     }
 }

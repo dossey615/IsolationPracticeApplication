@@ -35,6 +35,7 @@
         <activity
             android:name="com.example.dosshi.isolationpracticeapplication.DescriptionActivity"
             android:label="@string/title_activity_description">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
