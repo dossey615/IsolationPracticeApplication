@@ -181,8 +181,8 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
                             sensorY = event.values[1];
                             sensorZ = event.values[2];
                             globals.mobileAccelDataSet(sensorX, sensorY, sensorZ, event.timestamp);
-                            if (sensorX > 8 || sensorZ > 4) vibrator.vibrate(100);
-                            else vibrator.cancel();
+//                            if (sensorX > 8 || sensorZ > 4) vibrator.vibrate(100);
+//                            else vibrator.cancel();
                             String strTmp = "加速度センサー\n"
                                     + " X: " + sensorX + "\n"
                                     + " Y: " + sensorY + "\n"

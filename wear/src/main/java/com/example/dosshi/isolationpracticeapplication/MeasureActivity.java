@@ -70,11 +70,10 @@ public class MeasureActivity extends WearableActivity  implements SensorEventLis
 
         accelText = (TextView) findViewById(R.id.accel);
         gyroText = (TextView) findViewById(R.id.gyro);
-        msgText = (TextView) findViewById(R.id.textView4);
 
-        con = (BoxInsetLayout)findViewById(R.id.BoxInsetLayou);
-        colorDrawable = (ColorDrawable)con.getBackground();
-        temporaryColorInt = colorDrawable.getColor();
+//        con = (BoxInsetLayout)findViewById(R.id.BoxInsetLayou);
+//        colorDrawable = (ColorDrawable)con.getBackground();
+//        temporaryColorInt = colorDrawable.getColor();
 
 
         accelText.setText("用意");
@@ -145,7 +144,8 @@ public class MeasureActivity extends WearableActivity  implements SensorEventLis
         if (flag == 3){
             accelText.setText("計測");
             accelText.setTextSize(30);
-            con.setBackgroundColor(Color.GREEN);
+            accelText.setTextColor(Color.RED);
+//            con.setBackgroundColor(Color.GREEN);
             flag = 1;
         }
         if (flag == 1) {
@@ -153,13 +153,6 @@ public class MeasureActivity extends WearableActivity  implements SensorEventLis
                 switch (event.sensor.getType()) {
                     case Sensor.TYPE_ACCELEROMETER:
                         if (count <= 1000) {
-//                            gravityX = lowpassfilter(gravityX, event.values[0]);
-//                            gravityY = lowpassfilter(gravityY, event.values[1]);
-//                            gravityZ = lowpassfilter(gravityZ, event.values[2]);
-//
-//                            sensorX = highPassFilter(gravityX, event.values[0]);
-//                            sensorY = highPassFilter(gravityY, event.values[1]);
-//                            sensorZ = highPassFilter(gravityZ, event.values[2]);
 
                             SEND_DATA = event.timestamp + "," + event.values[0] + "," + event.values[1] + "," + event.values[2];
                             WatchDataSet.add(SEND_DATA);
@@ -176,8 +169,8 @@ public class MeasureActivity extends WearableActivity  implements SensorEventLis
                 }
                     if (mNode != null && count == 1000 && count2 == 1000) {
 
-                        msgText.setText("計測終了！");
-                        con.setBackgroundColor(Color.RED);
+                        accelText.setText("計測終了！");
+                        //con.setBackgroundColor(Color.RED);
                         sensorManager.unregisterListener(this);
                         for (int i = 0; i < WatchDataSet.size(); i++) {
                             SEND_DATA = WatchDataSet.get(i)+ "," + WatchDataSet2.get(i);
@@ -200,14 +193,5 @@ public class MeasureActivity extends WearableActivity  implements SensorEventLis
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
 
-    public float highPassFilter(float value1, float value2){
-        value2 = value2 - value1;
-        return value2;
-    }
-
-    public float lowpassfilter(float value1, float value2){
-        value1 = value2 * 0.1f + value1 * (1.0f - 0.1f);
-        return value1;
-    }
 
 }

@@ -14,28 +14,22 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/textView3"
-            android:layout_width="145dp"
-            android:layout_height="83dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="40dp"
+            android:id="@+id/msg"
+            android:layout_width="168dp"
+            android:layout_height="47dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="52dp"
+            android:layout_marginEnd="26dp"
+            android:layout_marginBottom="52dp"
             android:text="@string/descriptiontext"
-            android:textAlignment="viewStart"
+            android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.27"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <Switch
-            android:id="@+id/okswitch"
-            android:layout_width="147dp"
-            android:layout_height="61dp"
-            android:layout_marginStart="20dp"
-            android:text="準備OK！"
-            android:textColor="@color/blue"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/textView5"

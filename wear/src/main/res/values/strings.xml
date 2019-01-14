@@ -13,5 +13,5 @@
     <string name="text">計測中...</string>
     <string name="gyro">TextView</string>
     <string name="gyrotext">gyro</string>
-    <string name="descriptiontext">アプリの指示に従って\nスマートウォッチを\n装着してください\n準備ができたら画面を\nタップしてください。</string>
+    <string name="descriptiontext">アプリの指示に従って\nスマートウォッチを\n装着してください</string>
 </resources>

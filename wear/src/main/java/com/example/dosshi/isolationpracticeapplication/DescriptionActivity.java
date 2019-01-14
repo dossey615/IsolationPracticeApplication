@@ -1,33 +1,68 @@
 package com.example.dosshi.isolationpracticeapplication;
 
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
-import android.widget.CompoundButton;
-import android.widget.Switch;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.wearable.MessageApi;
 import com.google.android.gms.wearable.MessageEvent;
+import com.google.android.gms.wearable.NodeApi;
 import com.google.android.gms.wearable.Wearable;
 
-public class DescriptionActivity extends WearableActivity implements GoogleApiClient.ConnectionCallbacks, MessageApi.MessageListener {
+import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
-    private int flag = 1  ;
+public class DescriptionActivity extends WearableActivity implements SensorEventListener, GoogleApiClient.ConnectionCallbacks, MessageApi.MessageListener {
+
+    private int flag = 0;
     private static final String TAG = DescriptionActivity.class.getName();
     private GoogleApiClient mGoogleApiClient;
+    private GoogleApiClient mGoogleApiClient2;
     private String activChangeFlag = "off";
+
+    private TextView message;
+    private SensorManager sensorManager;
+    private String s;
+    private String SEND_DATA;
+    private String mNode;
+    private String realdata;
+
+    private ArrayList<String> WatchDataSet = new ArrayList<>();
+    private ArrayList <String> WatchDataSet2 = new ArrayList<>();
+    private Timer time = new Timer(false);
+    private int count = 0;
+    private Sensor accel;
+    private Sensor gyro;
+    private int count2 = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_description);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
+        message = (TextView)findViewById(R.id.msg);
+        //センサーマネージャーを取得
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        //センサマネージャに TYPE_ACCELEROMETER(加速度センサ) を指定します。
+        accel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        gyro = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(this, gyro, SensorManager.SENSOR_DELAY_NORMAL);
+
 
         //GoogleApiClientインスタンス生成
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -41,30 +76,63 @@ public class DescriptionActivity extends WearableActivity implements GoogleApiCl
                 .addApi(Wearable.API)
                 .build();
 
-        // idがswitchButtonのSwitchを取得
-        Switch switchButton = (Switch) findViewById(R.id.okswitch);
-        // switchButtonのオンオフが切り替わった時の処理を設定
-        switchButton.setOnCheckedChangeListener(
-                new CompoundButton.OnCheckedChangeListener() {
-                    public void onCheckedChanged(CompoundButton comButton, boolean isChecked) {
-                        // 表示する文字列をスイッチのオンオフで変える
-                        String displayChar = "";
-                        // オンなら
-                        if (isChecked) {
-                            displayChar = "ウォッチ準備OK";
-                        }
-                        // オフなら
-                        else {
-                            displayChar = "取り消し";
-                        }
-                        Toast toast = Toast.makeText(DescriptionActivity.this, displayChar, Toast.LENGTH_SHORT);
-                        toast.show();
-                    }
-                }
-
-        );
         // Enables Always-on
         setAmbientEnabled();
+        mGoogleApiClient2 = new GoogleApiClient.Builder(this)
+                .addApi(Wearable.API)
+                .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+                    @Override
+                    public void onConnected(Bundle bundle) {
+                        Log.d(TAG, "onConnected");
+                        Wearable.NodeApi.getConnectedNodes(mGoogleApiClient2).setResultCallback(new ResultCallback<NodeApi.GetConnectedNodesResult>() {
+                            @Override
+                            public void onResult(NodeApi.GetConnectedNodesResult nodes) {
+                                if (nodes.getNodes().size() > 0) {
+                                    mNode = nodes.getNodes().get(0).getId();
+                                }
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onConnectionSuspended(int i) {
+                        Log.d(TAG, "onConnectionSuspended");
+
+                    }
+                })
+                .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
+                    @Override
+                    public void onConnectionFailed(ConnectionResult connectionResult) {
+                        Log.d(TAG, "onConnectionFailed : " + connectionResult.toString());
+                    }
+                })
+                .build();
+
+
+//        // idがswitchButtonのSwitchを取得
+//        Switch switchButton = (Switch) findViewById(R.id.okswitch);
+//        // switchButtonのオンオフが切り替わった時の処理を設定
+//        switchButton.setOnCheckedChangeListener(
+//                new CompoundButton.OnCheckedChangeListener() {
+//                    public void onCheckedChanged(CompoundButton comButton, boolean isChecked) {
+//                        // 表示する文字列をスイッチのオンオフで変える
+//                        String displayChar = "";
+//                        // オンなら
+//                        if (isChecked) {
+//                            displayChar = "ウォッチ準備OK";
+//                        }
+//                        // オフなら
+//                        else {
+//                            displayChar = "取り消し";
+//                        }
+//                        Toast toast = Toast.makeText(DescriptionActivity.this, displayChar, Toast.LENGTH_SHORT);
+//                        toast.show();
+//                    }
+//                }
+//
+//        );
+//        // Enables Always-on
+//        setAmbientEnabled();
     }
 
     @Override
@@ -72,6 +140,16 @@ public class DescriptionActivity extends WearableActivity implements GoogleApiCl
         super.onStart();
         //GoogleApiClient接続
         mGoogleApiClient.connect();
+        mGoogleApiClient2.connect();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mGoogleApiClient.disconnect();
+        mGoogleApiClient2.disconnect();
+        // Listenerを解除
+        sensorManager.unregisterListener(this);
     }
 
     @Override
@@ -90,8 +168,74 @@ public class DescriptionActivity extends WearableActivity implements GoogleApiCl
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
         activChangeFlag = messageEvent.getPath();
-        Intent intent = new Intent(getApplication(), MeasureActivity.class);
-        // ここで1秒間スリープし、スプラッシュを表示させたままにする。
-        startActivity(intent);
+        StartActive();
+//        Intent intent = new Intent(getApplication(), MeasureActivity.class);
+//        startActivity(intent);
     }
+
+    void StartActive() {
+
+        message.setText("用意");
+
+        TimerTask task = new TimerTask() {
+
+            @Override
+            public void run() {
+                flag = 3;
+                time.cancel();
+            }
+        };
+        time.schedule(task, 3000);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if (flag == 3){
+            message.setText("計測中");
+            message.setTextSize(30);
+            message.setTextColor(Color.RED);
+            flag = 1;
+        }
+        if (flag == 1) {
+            switch (event.sensor.getType()) {
+                case Sensor.TYPE_ACCELEROMETER:
+                    if (count <= 1000) {
+
+                        SEND_DATA = event.timestamp + "," + event.values[0] + "," + event.values[1] + "," + event.values[2];
+                        WatchDataSet.add(SEND_DATA);
+                        count++;
+                    }
+                    break;
+
+                case Sensor.TYPE_GYROSCOPE:
+                    if (count2 <= 1000) {
+                        WatchDataSet2.add(event.values[0]+ "," + event.values[1] + "," + event.values[2]);
+                        count2++;
+                    }
+                    break;
+            }
+            if (mNode != null && count == 1000 ) {
+                message.setText("計測終了！");
+                sensorManager.unregisterListener(this);
+                for (int i = 0; i < WatchDataSet.size(); i++) {
+                    SEND_DATA = WatchDataSet.get(i)+ "," + WatchDataSet2.get(i);
+                    Wearable.MessageApi.sendMessage(mGoogleApiClient2, mNode, SEND_DATA, null).setResultCallback(new ResultCallback<MessageApi.SendMessageResult>() {
+                        @Override
+                        public void onResult(MessageApi.SendMessageResult result) {
+                            if (!result.getStatus().isSuccess()) {
+                                Log.d(TAG, "ERROR : failed to send Message" + result.getStatus());
+                            }
+                        }
+                    });
+                }
+            }
+        }
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    }
+
+
 }
