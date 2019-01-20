@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -43,9 +44,16 @@ public class PartsDescriptionActivity extends AppCompatActivity {
 
         //選ばれた部分の表示
         TextView textView = findViewById(R.id.SelectedParts);
-        if(data.equals("Chest"))data ="練習部位：胸";
-        else if(data.equals("Neck"))data ="練習部位：首";
-        else data ="練習部位：腰";
+        ImageView image = findViewById(R.id.PartsImageView);
+        if(data.equals("Chest")){
+            data ="練習部位：胸";
+        } else if(data.equals("Neck")) {
+            image.setImageResource(R.drawable.head);
+            data ="練習部位：首";
+        } else {
+            image.setImageResource(R.drawable.hip);
+            data ="練習部位：腰";
+        }
         textView.setText(data);
 
         //時間のスピナー表示

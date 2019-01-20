@@ -23,12 +23,16 @@
 
     <Button
         android:id="@+id/start_assist"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="29dp"
         android:layout_marginBottom="16dp"
-        android:layout_marginStart="172dp"
         android:text="計測を開始"
+        android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/example"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -45,8 +49,8 @@
 
     <Button
         android:id="@+id/example"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="84dp"
+        android:layout_height="44dp"
         android:layout_marginStart="14dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
@@ -54,4 +58,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/start_assist" />
+
+    <ImageView
+        android:id="@+id/PartsImageView"
+        android:layout_width="331dp"
+        android:layout_height="388dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="9dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="23dp"
+        app:layout_constraintBottom_toTopOf="@+id/start_assist"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:srcCompat="@drawable/chest" />
 </android.support.constraint.ConstraintLayout>
