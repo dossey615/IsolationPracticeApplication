@@ -198,6 +198,8 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
                         gyroX = event.values[0];
                         gyroY = event.values[1];
                         gyroZ = event.values[2];
+                        if (globals.slctParts.equals("Neck") && (gyroX >= 0.3 || gyroZ >= 0.3|| gyroX <= -0.3 || gyroZ <= -0.25)) vibrator.vibrate(100);
+                        else vibrator.cancel();
                         String gyroTmp = "ジャイロセンサー\n"
                                 + " X: " + gyroX + "\n"
                                 + " Y: " + gyroY + "\n"

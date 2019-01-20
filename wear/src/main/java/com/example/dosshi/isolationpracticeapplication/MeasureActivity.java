@@ -7,6 +7,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.wear.widget.BoxInsetLayout;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
@@ -55,6 +56,7 @@ public class MeasureActivity extends WearableActivity  implements SensorEventLis
     private float gyroY = 0;
     private float gyroZ = 0;
     private int temporaryColorInt;
+    private  Vibrator vibrator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +68,9 @@ public class MeasureActivity extends WearableActivity  implements SensorEventLis
         //センサマネージャに TYPE_ACCELEROMETER(加速度センサ) を指定します。
         accel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         gyro = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
+        vibrator.vibrate(100);
 
         accelText = (TextView) findViewById(R.id.accel);
         gyroText = (TextView) findViewById(R.id.gyro);
@@ -163,6 +167,7 @@ public class MeasureActivity extends WearableActivity  implements SensorEventLis
                     case Sensor.TYPE_GYROSCOPE:
                         if (count2 <= 1000) {
                             WatchDataSet2.add(event.values[0]+ "," + event.values[1] + "," + event.values[2]);
+
                             count2++;
                         }
                         break;

@@ -7,6 +7,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
@@ -31,6 +32,7 @@ public class DescriptionActivity extends WearableActivity implements SensorEvent
     private GoogleApiClient mGoogleApiClient;
     private GoogleApiClient mGoogleApiClient2;
     private String activChangeFlag = "off";
+    private  Vibrator vibrator;
 
     private TextView message;
     private SensorManager sensorManager;
@@ -62,8 +64,9 @@ public class DescriptionActivity extends WearableActivity implements SensorEvent
         gyro = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_NORMAL);
         sensorManager.registerListener(this, gyro, SensorManager.SENSOR_DELAY_NORMAL);
+        vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
-
+        vibrator.vibrate(100);
         //GoogleApiClientインスタンス生成
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -210,6 +213,8 @@ public class DescriptionActivity extends WearableActivity implements SensorEvent
                 case Sensor.TYPE_GYROSCOPE:
                     if (count2 <= 1000) {
                         WatchDataSet2.add(event.values[0]+ "," + event.values[1] + "," + event.values[2]);
+                        if (event.values[0] >= 1 || event.values[2] >= 0.5|| event.values[0] <= 0.6 || event.values[2] <= 0.7) vibrator.vibrate(100);
+                        else vibrator.cancel();
                         count2++;
                     }
                     break;
