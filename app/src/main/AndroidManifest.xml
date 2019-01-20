@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.dosshi.isolationpracticeapplication">
-
     <!-- <uses-permission android:name="android.permission.VIBRATE" /> -->
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
-
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".Globals"
         android:allowBackup="true"
+        android:gravity="center"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:gravity="center"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -46,10 +44,13 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ChartsActivity"
-            android:label="アイソレーショングラフ"/>
-        <activity android:name=".SampleVideoActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        </activity>
+            android:label="アイソレーショングラフ" />
+        <activity
+            android:name=".SampleVideoActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+        <activity
+            android:name=".HistoryActivity"
+            android:label="履歴"></activity>
     </application>
 
 </manifest>

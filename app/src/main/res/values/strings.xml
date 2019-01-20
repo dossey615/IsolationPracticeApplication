@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">タイトル</string>
+    <string name="app_name">アイソレ練習支援</string>
     <string name="app_select">部位選択</string>
     <string name="app_description">練習説明</string>
     <string name="use">使い方</string>

@@ -29,6 +29,7 @@ public class MainResearchActivity extends AppCompatActivity{
         setTheme(R.style.AppTheme);
         setContentView(R.layout.activity_main_reaearch);
         Button sendButton = findViewById(R.id.start);
+        Button test = findViewById(R.id.help);
         globals = (Globals) this.getApplication();
 
         globals.valueInit();
@@ -38,6 +39,13 @@ public class MainResearchActivity extends AppCompatActivity{
         sendButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplication(), SelectPartsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        test.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplication(), HistoryActivity.class);
                 startActivity(intent);
             }
         });

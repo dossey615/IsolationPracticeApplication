@@ -3,6 +3,7 @@ package com.example.dosshi.isolationpracticeapplication;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -17,13 +18,19 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,6 +41,9 @@ public class ChartsActivity extends AppCompatActivity {
 
     private LineChart mChart;
     private Globals globals;
+    private StorageReference storageRef;
+    private FirebaseStorage storage;
+
     private HistoryData hisdata = new HistoryData();
     private int size = 0;
     private int hisflag = 0;
@@ -44,6 +54,8 @@ public class ChartsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_charts);
         TabLayout tabLayout = findViewById(R.id.tabLayout);
+
+        storage = FirebaseStorage.getInstance();
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -106,10 +118,7 @@ public class ChartsActivity extends AppCompatActivity {
         setData(flag);
 
         mChart.animateX(2500);
-        //mChart.invalidate();
 
-        // dont forget to refresh the drawing
-        // mChart.invalidate();
     }
 
     public void loadhistry(){
@@ -306,5 +315,27 @@ public class ChartsActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         loadhistry();
         return super.onCreateOptionsMenu(menu);
+    }
+
+    public void loadFirebase(String downloadURL){
+        storageRef = storage.getReferenceFromUrl(downloadURL);
+        final File localFile = new File(getFilesDir(),"compare.csv");
+        storageRef.getFile(localFile)
+                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                        // Successfully downloaded data to local file
+                        // ...
+                        Log.d("SUCSSESS", "SUCSSESS : yattane " + taskSnapshot);
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle failed download
+                // ...
+                Log.d("ERROR", "ERROR : failed to send Message " + exception);
+            }
+        });
     }
 }
