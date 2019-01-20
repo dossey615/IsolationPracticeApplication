@@ -2,7 +2,7 @@ package com.example.dosshi.isolationpracticeapplication;
 
 import java.util.ArrayList;
 
-public class HistoryData {
+public class HistoryData{
     public ArrayList<Float> mobX = new ArrayList<>();
     public ArrayList<Float> mobY = new ArrayList<>();
     public ArrayList<Float> mobZ = new ArrayList<>();
@@ -37,6 +37,10 @@ public class HistoryData {
     }
     public int dataSize(){
         return mobX.size();
+    }
+
+    public int dataSizeWatch(){
+        return watX.size();
     }
 
 }

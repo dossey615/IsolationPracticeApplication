@@ -29,6 +29,7 @@ public class Globals extends Application {
     ArrayList<String> watchTimestamp = new ArrayList<>();
     ArrayList<String> watchrealData= new ArrayList<>();
     ArrayList<String> mobileRealdata = new ArrayList<>();
+    HistoryData historyAccData = new HistoryData();
 
 
 
@@ -64,6 +65,7 @@ public class Globals extends Application {
         watchrealData.clear();
         watchTimestamp.clear();
         mobileTimestamp.clear();
+        historyAccData.clear();
 
 
         mobileTimestamp.add("0");
@@ -85,7 +87,7 @@ public class Globals extends Application {
     }
     public void setHistoryData(String date, String url){
         historyData.put(date, url);
-    }
+    }//履歴用のデータ保存
 
     public void watchDataSet(ArrayList array){
         watchData = array;

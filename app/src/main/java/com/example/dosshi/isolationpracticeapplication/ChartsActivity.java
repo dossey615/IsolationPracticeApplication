@@ -1,5 +1,6 @@
 package com.example.dosshi.isolationpracticeapplication;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -9,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -44,7 +44,7 @@ public class ChartsActivity extends AppCompatActivity {
     private StorageReference storageRef;
     private FirebaseStorage storage;
 
-    private HistoryData hisdata = new HistoryData();
+    private HistoryData hisdata;
     private int size = 0;
     private int hisflag = 0;
     private ArrayList<String> keys = new ArrayList<>();
@@ -56,6 +56,14 @@ public class ChartsActivity extends AppCompatActivity {
         TabLayout tabLayout = findViewById(R.id.tabLayout);
 
         storage = FirebaseStorage.getInstance();
+        globals = (Globals)this.getApplication();
+
+        Intent intent = getIntent();
+        if(intent.getStringExtra(HistoryActivity.COMPARE) != null) {
+            hisdata = globals.historyAccData;
+        }else{
+            hisdata = new HistoryData();
+        }
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -80,7 +88,7 @@ public class ChartsActivity extends AppCompatActivity {
 
             }
         });
-        globals = (Globals)this.getApplication();
+
         initCharts(0);
     }
 
@@ -121,14 +129,16 @@ public class ChartsActivity extends AppCompatActivity {
 
     }
 
+    //databaseから表を取得
     public void loadhistry(){
-        //Get datasnapshot at your "users" root node
+        //Get datasnapshot at your "user1" root node
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/User1/").child(globals.slctParts);
         ref.addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
                         //Get map of users in datasnapshot
+                        globals.historyData.clear();
                         for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
                             String date = (String) dataSnapshot.child("Date").getValue();
@@ -202,7 +212,7 @@ public class ChartsActivity extends AppCompatActivity {
 
             ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
 //            dataSets.add(setCharts(set1,Color.RED)); // add the datasets
-            dataSets.add(setCharts(set2,Color.BLUE)); // add the datasets
+            dataSets.add(setCharts(set2,Color.RED)); // add the datasets
 //            dataSets.add(setCharts(set3,Color.GREEN)); // add the datasets
 //            dataSets.add(setCharts(set4,Color.MAGENTA)); // add the datasets
             dataSets.add(setCharts(set5,Color.CYAN)); // add the datasets
@@ -227,46 +237,6 @@ public class ChartsActivity extends AppCompatActivity {
         set.setFormSize(15.f);
 
         return  set;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_radio1) {
-            hisdata.clear();
-            initCharts(0);
-        } else if (item.getItemId() == R.id.action_radio2) {
-            if(size>=2){
-                load(keys.get(size - 2));
-                initCharts(0);
-            }else{
-                toast();
-            }
-        } else if (item.getItemId() == R.id.action_radio3) {
-            if(size>=3){
-                load(keys.get(size - 3));
-                initCharts(0);
-            }else{
-                toast();
-            }
-        } else if (item.getItemId() == R.id.action_radio4) {
-            if(size >=4){
-                load(keys.get(size - 4));
-                initCharts(0);
-            }else{
-                toast();
-            }
-        } else if (item.getItemId() == R.id.action_radio5) {
-            if(size>=4){
-                load(keys.get(size - 5));
-                initCharts(0);
-            }else{
-                toast();
-            }
-        } else if (item.getItemId() == R.id.action_radio6) {
-            exampleload();
-            initCharts(0);
-        }
-        return true;
     }
 
     public void load(String name){
@@ -305,16 +275,20 @@ public class ChartsActivity extends AppCompatActivity {
         }
     }
 
-    public void toast() {
-        Toast toast = Toast.makeText(ChartsActivity.this, "履歴が存在しません", Toast.LENGTH_SHORT);
-        toast.show();
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         loadhistry();
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_settings) {
+            Intent intent = new Intent(getApplication(), HistoryActivity.class);
+            startActivity(intent);
+        }
+        return true;
     }
 
     public void loadFirebase(String downloadURL){
@@ -324,16 +298,12 @@ public class ChartsActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                        // Successfully downloaded data to local file
-                        // ...
                         Log.d("SUCSSESS", "SUCSSESS : yattane " + taskSnapshot);
 
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                // Handle failed download
-                // ...
                 Log.d("ERROR", "ERROR : failed to send Message " + exception);
             }
         });

@@ -3,7 +3,6 @@ package com.example.dosshi.isolationpracticeapplication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -45,16 +44,10 @@ public class MainResearchActivity extends AppCompatActivity{
 
         test.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(getApplication(), HistoryActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(getApplication(), HistoryActivity.class);
+//                startActivity(intent);
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return super.onCreateOptionsMenu(menu);
     }
 
 }
