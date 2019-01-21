@@ -2,16 +2,35 @@
 <menu xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/help"
-        android:icon="@android:drawable/ic_menu_help"
-        android:orderInCategory="100"
-        android:title="@string/histry"
-        app:showAsAction="ifRoom"></item>
-    <item
         android:id="@+id/action_settings"
+        android:icon="@drawable/ic_menu_black"
         android:orderInCategory="100"
         android:title="@string/histry"
-        android:icon="@android:drawable/ic_menu_recent_history"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom">
+
+        <menu>
+            <!-- ブラウザで開く -->
+            <item
+                android:id="@+id/menu_history"
+                android:icon="@android:drawable/ic_menu_recent_history"
+                android:title="履歴"
+                app:showAsAction="never" />
+
+            <!-- URLの確認 -->
+            <item
+                android:id="@+id/menu_movie"
+                android:icon="@android:drawable/ic_menu_slideshow"
+                android:title="見本動画"
+                app:showAsAction="never" />
+
+            <!-- ページ内検索 -->
+            <item
+                android:id="@+id/menu_help"
+                android:icon="@android:drawable/ic_menu_help"
+                android:title="このグラフの見方"
+                app:showAsAction="never" />
+
+        </menu>
+    </item>
 
 </menu>

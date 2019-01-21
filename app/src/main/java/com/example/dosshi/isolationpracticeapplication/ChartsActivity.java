@@ -215,7 +215,7 @@ public class ChartsActivity extends AppCompatActivity {
             dataSets.add(setCharts(set2,Color.RED)); // add the datasets
 //            dataSets.add(setCharts(set3,Color.GREEN)); // add the datasets
 //            dataSets.add(setCharts(set4,Color.MAGENTA)); // add the datasets
-            dataSets.add(setCharts(set5,Color.CYAN)); // add the datasets
+            dataSets.add(setCharts(set5,Color.BLUE)); // add the datasets
 //            dataSets.add(setCharts(set6,Color.LTGRAY)); //
 
             // create a data object with the datasets
@@ -284,8 +284,11 @@ public class ChartsActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_settings) {
+        if (item.getItemId() == R.id.menu_history) {
             Intent intent = new Intent(getApplication(), HistoryActivity.class);
+            startActivity(intent);
+        } else if (item.getItemId() == R.id.menu_movie) {
+            Intent intent = new Intent(getApplication(), SampleVideoActivity.class);
             startActivity(intent);
         }
         return true;

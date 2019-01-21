@@ -1,6 +1,5 @@
 package com.example.dosshi.isolationpracticeapplication;
 
-import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -54,7 +53,6 @@ public class DescriptionActivity extends WearableActivity implements SensorEvent
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_description);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
         message = (TextView)findViewById(R.id.msg);
         //センサーマネージャーを取得
@@ -64,9 +62,8 @@ public class DescriptionActivity extends WearableActivity implements SensorEvent
         gyro = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_NORMAL);
         sensorManager.registerListener(this, gyro, SensorManager.SENSOR_DELAY_NORMAL);
-        vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+//        vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
-        vibrator.vibrate(100);
         //GoogleApiClientインスタンス生成
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -202,7 +199,7 @@ public class DescriptionActivity extends WearableActivity implements SensorEvent
         if (flag == 1) {
             switch (event.sensor.getType()) {
                 case Sensor.TYPE_ACCELEROMETER:
-                    if (count <= 1000) {
+                    if (count <= 1001) {
 
                         SEND_DATA = event.timestamp + "," + event.values[0] + "," + event.values[1] + "," + event.values[2];
                         WatchDataSet.add(SEND_DATA);
@@ -211,15 +208,15 @@ public class DescriptionActivity extends WearableActivity implements SensorEvent
                     break;
 
                 case Sensor.TYPE_GYROSCOPE:
-                    if (count2 <= 1000) {
+                    if (count2 <= 1001) {
                         WatchDataSet2.add(event.values[0]+ "," + event.values[1] + "," + event.values[2]);
-                        if (event.values[0] >= 1 || event.values[2] >= 0.5|| event.values[0] <= 0.6 || event.values[2] <= 0.7) vibrator.vibrate(100);
-                        else vibrator.cancel();
+//                        if (event.values[0] >= 1 || event.values[2] >= 0.5|| event.values[0] <= 0.6 || event.values[2] <= 0.7) vibrator.vibrate(100);
+//                        else vibrator.cancel();
                         count2++;
                     }
                     break;
             }
-            if (mNode != null && count == 1000 ) {
+            if (mNode != null && count == 1001 && count2 == 1001) {
                 message.setText("計測終了！");
                 sensorManager.unregisterListener(this);
                 for (int i = 0; i < WatchDataSet.size(); i++) {
