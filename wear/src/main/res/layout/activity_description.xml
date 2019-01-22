@@ -2,6 +2,7 @@
 <android.support.wear.widget.BoxInsetLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/card_default_background"
@@ -43,6 +44,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/accelTextView"
+            android:layout_width="170dp"
+            android:layout_height="51dp"
+            android:layout_marginStart="9dp"
+            android:layout_marginTop="11dp"
+            android:text="ここに加速度表示"
+            android:textColor="@color/black"
+            android:textSize="8sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/msg" />
 
     </android.support.constraint.ConstraintLayout>
 </android.support.wear.widget.BoxInsetLayout>

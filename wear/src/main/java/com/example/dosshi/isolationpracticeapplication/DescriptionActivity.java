@@ -1,6 +1,7 @@
 package com.example.dosshi.isolationpracticeapplication;
 
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -8,6 +9,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
+import android.support.wear.widget.BoxInsetLayout;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
 import android.widget.TextView;
@@ -30,10 +32,15 @@ public class DescriptionActivity extends WearableActivity implements SensorEvent
     private static final String TAG = DescriptionActivity.class.getName();
     private GoogleApiClient mGoogleApiClient;
     private GoogleApiClient mGoogleApiClient2;
+    private ColorDrawable colorDrawable;
+    private BoxInsetLayout con;
+    private int temporaryColorInt;
     private String activChangeFlag = "off";
     private  Vibrator vibrator;
 
     private TextView message;
+    private TextView acceltext;
+
     private SensorManager sensorManager;
     private String s;
     private String SEND_DATA;
@@ -55,6 +62,11 @@ public class DescriptionActivity extends WearableActivity implements SensorEvent
         setContentView(R.layout.activity_description);
 
         message = (TextView)findViewById(R.id.msg);
+        acceltext = (TextView) findViewById(R.id.accelTextView);
+        con = (BoxInsetLayout)findViewById(R.id.background);
+        colorDrawable = (ColorDrawable)con.getBackground();
+        temporaryColorInt = colorDrawable.getColor();
+
         //センサーマネージャーを取得
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         //センサマネージャに TYPE_ACCELEROMETER(加速度センサ) を指定します。
@@ -185,7 +197,7 @@ public class DescriptionActivity extends WearableActivity implements SensorEvent
                 time.cancel();
             }
         };
-        time.schedule(task, 3000);
+        time.schedule(task, 4000);
     }
 
     @Override
@@ -194,13 +206,14 @@ public class DescriptionActivity extends WearableActivity implements SensorEvent
             message.setText("計測中");
             message.setTextSize(30);
             message.setTextColor(Color.RED);
+            con.setBackgroundColor(Color.GREEN);
             flag = 1;
         }
         if (flag == 1) {
             switch (event.sensor.getType()) {
                 case Sensor.TYPE_ACCELEROMETER:
                     if (count <= 1001) {
-
+                        acceltext.setText(event.values[0]+"\n"+ event.values[1]+"\n"+event.values[2]);
                         SEND_DATA = event.timestamp + "," + event.values[0] + "," + event.values[1] + "," + event.values[2];
                         WatchDataSet.add(SEND_DATA);
                         count++;
@@ -217,6 +230,7 @@ public class DescriptionActivity extends WearableActivity implements SensorEvent
                     break;
             }
             if (mNode != null && count == 1001 && count2 == 1001) {
+                con.setBackgroundColor(Color.BLUE);
                 message.setText("計測終了！");
                 sensorManager.unregisterListener(this);
                 for (int i = 0; i < WatchDataSet.size(); i++) {
