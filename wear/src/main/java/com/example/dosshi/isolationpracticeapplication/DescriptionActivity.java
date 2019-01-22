@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.wear.widget.BoxInsetLayout;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -67,6 +68,9 @@ public class DescriptionActivity extends WearableActivity implements SensorEvent
         colorDrawable = (ColorDrawable)con.getBackground();
         temporaryColorInt = colorDrawable.getColor();
 
+        //画面を常時インタラクティブモードにする
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         //センサーマネージャーを取得
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         //センサマネージャに TYPE_ACCELEROMETER(加速度センサ) を指定します。
@@ -74,7 +78,7 @@ public class DescriptionActivity extends WearableActivity implements SensorEvent
         gyro = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_NORMAL);
         sensorManager.registerListener(this, gyro, SensorManager.SENSOR_DELAY_NORMAL);
-//        vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+        vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
         //GoogleApiClientインスタンス生成
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -119,32 +123,6 @@ public class DescriptionActivity extends WearableActivity implements SensorEvent
                     }
                 })
                 .build();
-
-
-//        // idがswitchButtonのSwitchを取得
-//        Switch switchButton = (Switch) findViewById(R.id.okswitch);
-//        // switchButtonのオンオフが切り替わった時の処理を設定
-//        switchButton.setOnCheckedChangeListener(
-//                new CompoundButton.OnCheckedChangeListener() {
-//                    public void onCheckedChanged(CompoundButton comButton, boolean isChecked) {
-//                        // 表示する文字列をスイッチのオンオフで変える
-//                        String displayChar = "";
-//                        // オンなら
-//                        if (isChecked) {
-//                            displayChar = "ウォッチ準備OK";
-//                        }
-//                        // オフなら
-//                        else {
-//                            displayChar = "取り消し";
-//                        }
-//                        Toast toast = Toast.makeText(DescriptionActivity.this, displayChar, Toast.LENGTH_SHORT);
-//                        toast.show();
-//                    }
-//                }
-//
-//        );
-//        // Enables Always-on
-//        setAmbientEnabled();
     }
 
     @Override
@@ -181,8 +159,6 @@ public class DescriptionActivity extends WearableActivity implements SensorEvent
     public void onMessageReceived(MessageEvent messageEvent) {
         activChangeFlag = messageEvent.getPath();
         StartActive();
-//        Intent intent = new Intent(getApplication(), MeasureActivity.class);
-//        startActivity(intent);
     }
 
     void StartActive() {
@@ -205,7 +181,7 @@ public class DescriptionActivity extends WearableActivity implements SensorEvent
         if (flag == 3){
             message.setText("計測中");
             message.setTextSize(30);
-            message.setTextColor(Color.RED);
+            message.setTextColor(Color.WHITE);
             con.setBackgroundColor(Color.GREEN);
             flag = 1;
         }
@@ -213,7 +189,7 @@ public class DescriptionActivity extends WearableActivity implements SensorEvent
             switch (event.sensor.getType()) {
                 case Sensor.TYPE_ACCELEROMETER:
                     if (count <= 1001) {
-                        acceltext.setText(event.values[0]+"\n"+ event.values[1]+"\n"+event.values[2]);
+
                         SEND_DATA = event.timestamp + "," + event.values[0] + "," + event.values[1] + "," + event.values[2];
                         WatchDataSet.add(SEND_DATA);
                         count++;
@@ -222,14 +198,15 @@ public class DescriptionActivity extends WearableActivity implements SensorEvent
 
                 case Sensor.TYPE_GYROSCOPE:
                     if (count2 <= 1001) {
+                        acceltext.setText(event.values[0]+"\n"+ event.values[1]+"\n"+event.values[2]);
                         WatchDataSet2.add(event.values[0]+ "," + event.values[1] + "," + event.values[2]);
-//                        if (event.values[0] >= 1 || event.values[2] >= 0.5|| event.values[0] <= 0.6 || event.values[2] <= 0.7) vibrator.vibrate(100);
-//                        else vibrator.cancel();
+                        if (event.values[0] >= 1 || event.values[2] >= 0.5|| event.values[0] <= -1.0 || event.values[2] <= -0.7) vibrator.vibrate(100);
                         count2++;
                     }
                     break;
             }
             if (mNode != null && count == 1001 && count2 == 1001) {
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
                 con.setBackgroundColor(Color.BLUE);
                 message.setText("計測終了！");
                 sensorManager.unregisterListener(this);

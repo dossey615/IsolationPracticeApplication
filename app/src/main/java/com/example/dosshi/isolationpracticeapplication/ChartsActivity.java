@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
@@ -113,11 +114,28 @@ public class ChartsActivity extends AppCompatActivity {
         // Y軸最大最小設定
         leftAxis.getLabelPosition();
 
-        leftAxis.setAxisMaximum(globals.maxValue() + 10f);
-        leftAxis.setAxisMinimum(globals.minValue() - 10f);
+        leftAxis.setAxisMaximum(globals.maxValue() + 5f);
+        leftAxis.setAxisMinimum(globals.minValue() - 5f);
         // Grid横軸を破線
         leftAxis.enableGridDashedLine(10f, 10f, 0f);
         leftAxis.setDrawZeroLine(false);
+
+        LimitLine ll = new LimitLine(-1f, "");
+        ll.setLineColor(0x8000CC00);
+        ll.setLineWidth(2);
+        ll.setTextColor(Color.BLACK);
+        ll.setTextSize(12f);
+        leftAxis.addLimitLine(ll);
+        ll = new LimitLine(1f, "");
+        ll.setLineColor(0x8000CC00);
+        ll.setLineWidth(2);
+        ll.setTextColor(Color.BLACK);
+        ll.setTextSize(12f);
+        leftAxis.addLimitLine(ll);
+
+
+
+
 
         // 右側の目盛り
         mChart.getAxisRight().setEnabled(false);
