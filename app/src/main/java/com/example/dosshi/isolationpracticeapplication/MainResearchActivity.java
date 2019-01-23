@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class MainResearchActivity extends AppCompatActivity{
+public class MainResearchActivity extends AppCompatActivity {
 
     private TextView text;
     private Globals globals;
@@ -44,11 +44,9 @@ public class MainResearchActivity extends AppCompatActivity{
 
         test.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-//                Intent intent = new Intent(getApplication(), HistoryActivity.class);
-//                startActivity(intent);
+
             }
         });
     }
-
 }
 

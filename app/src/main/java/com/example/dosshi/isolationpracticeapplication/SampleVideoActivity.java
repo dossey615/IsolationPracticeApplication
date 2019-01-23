@@ -1,5 +1,6 @@
 package com.example.dosshi.isolationpracticeapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.MediaController;
@@ -19,7 +20,14 @@ public class SampleVideoActivity extends AppCompatActivity {
 
         videoView = (VideoView) findViewById(R.id.videoView);
 
-        videoView.setVideoPath("android.resource://" + this.getPackageName() + "/" + R.raw.temple);
+        Intent intent = getIntent();
+        if(intent.getStringExtra(ChartsActivity.EXAMPLE) != null) {
+            videoView.setVideoPath("android.resource://" + this.getPackageName() + "/" + R.raw.samplemovie);
+        }else{
+            videoView.setVideoPath("android.resource://" + this.getPackageName() + "/" + R.raw.temple);
+        }
+
+
         videoView.start();
 
         // Set the media controller buttons

@@ -1,15 +1,20 @@
 package com.example.dosshi.isolationpracticeapplication;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.LimitLine;
@@ -44,8 +49,10 @@ public class ChartsActivity extends AppCompatActivity {
     private Globals globals;
     private StorageReference storageRef;
     private FirebaseStorage storage;
+    public static String EXAMPLE;
 
     private HistoryData hisdata;
+    private int tabflag = 0;
     private int size = 0;
     private int hisflag = 0;
     private ArrayList<String> keys = new ArrayList<>();
@@ -71,9 +78,11 @@ public class ChartsActivity extends AppCompatActivity {
             public void onTabSelected(TabLayout.Tab tab) {
               switch (tab.getPosition()){
                   case 0:
+                      tabflag = 0;
                       initCharts(0);
                       break;
                   case 1:
+                      tabflag = 1;
                       initCharts(1);
                       break;
               }
@@ -307,7 +316,10 @@ public class ChartsActivity extends AppCompatActivity {
             startActivity(intent);
         } else if (item.getItemId() == R.id.menu_movie) {
             Intent intent = new Intent(getApplication(), SampleVideoActivity.class);
+            intent.putExtra(EXAMPLE, globals.slctParts);
             startActivity(intent);
+        } else if (item.getItemId() == R.id.menu_help) {
+            lecture();
         }
         return true;
     }
@@ -328,5 +340,34 @@ public class ChartsActivity extends AppCompatActivity {
                 Log.d("ERROR", "ERROR : failed to send Message " + exception);
             }
         });
+    }
+
+    private void lecture() {// カスタムビューを設定
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
+        final View layout = inflater.inflate(R.layout.dialog, (ViewGroup) findViewById(R.id.alertdialog_layout));
+
+        if (tabflag == 1) {
+            // アラーとダイアログ を生成
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("グラフの見方（可動部）");
+            builder.setView(layout);
+            builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+            // 表示
+            builder.create().show();
+        }else{
+            // アラーとダイアログ を生成
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("グラフの見方（軸部）");
+            builder.setView(layout);
+            builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+            // 表示
+            builder.create().show();
+        }
     }
 }
