@@ -200,7 +200,7 @@ public class DescriptionActivity extends WearableActivity implements SensorEvent
                     if (count2 <= 1001) {
                         acceltext.setText(event.values[0]+"\n"+ event.values[1]+"\n"+event.values[2]);
                         WatchDataSet2.add(event.values[0]+ "," + event.values[1] + "," + event.values[2]);
-                        if (event.values[0] >= 1 || event.values[2] >= 0.5|| event.values[0] <= -1.0 || event.values[2] <= -0.7) vibrator.vibrate(100);
+                        if (event.values[2] >= 0.7 || event.values[2] <= -0.8) vibrator.vibrate(100);
                         count2++;
                     }
                     break;

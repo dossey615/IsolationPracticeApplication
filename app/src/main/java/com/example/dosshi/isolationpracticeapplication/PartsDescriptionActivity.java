@@ -3,6 +3,7 @@ package com.example.dosshi.isolationpracticeapplication;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -56,9 +57,9 @@ public class PartsDescriptionActivity extends AppCompatActivity {
         }
         textView.setText(data);
 
-        //時間のスピナー表示
         Button stbutton = findViewById(R.id.start_assist);
         Button examplebutton = findViewById(R.id.example);
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         startButton(stbutton);
         exampleButton(examplebutton);

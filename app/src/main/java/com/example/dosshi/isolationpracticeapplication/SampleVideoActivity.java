@@ -24,7 +24,7 @@ public class SampleVideoActivity extends AppCompatActivity {
         if(intent.getStringExtra(ChartsActivity.EXAMPLE) != null) {
             videoView.setVideoPath("android.resource://" + this.getPackageName() + "/" + R.raw.samplemovie);
         }else{
-            videoView.setVideoPath("android.resource://" + this.getPackageName() + "/" + R.raw.temple);
+            videoView.setVideoPath("android.resource://" + this.getPackageName() + "/" + R.raw.exampleneck);
         }
 
 

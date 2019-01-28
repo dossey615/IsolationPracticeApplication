@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.LimitLine;
@@ -132,14 +133,13 @@ public class ChartsActivity extends AppCompatActivity {
         LimitLine ll = new LimitLine(-1f, "");
         ll.setLineColor(0x8000CC00);
         ll.setLineWidth(2);
-        ll.setTextColor(Color.BLACK);
-        ll.setTextSize(12f);
         leftAxis.addLimitLine(ll);
         ll = new LimitLine(1f, "");
         ll.setLineColor(0x8000CC00);
         ll.setLineWidth(2);
+        ll.setLabel("境界線．詳しいことは右上のグラフの見方に記載");
         ll.setTextColor(Color.BLACK);
-        ll.setTextSize(12f);
+        ll.setTextSize(10f);
         leftAxis.addLimitLine(ll);
 
 
@@ -351,6 +351,10 @@ public class ChartsActivity extends AppCompatActivity {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("グラフの見方（可動部）");
             builder.setView(layout);
+            ImageView imageView = (ImageView)layout.findViewById(R.id.imageGraph);
+            ImageView descimageView = (ImageView)layout.findViewById(R.id.descriptImsge);
+            imageView.setImageResource(R.drawable.moveref);
+            descimageView.setImageResource(R.drawable.point1ref);
             builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                 }
@@ -362,6 +366,10 @@ public class ChartsActivity extends AppCompatActivity {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("グラフの見方（軸部）");
             builder.setView(layout);
+            ImageView imageView = (ImageView)layout.findViewById(R.id.imageGraph);
+            ImageView descimageView = (ImageView)layout.findViewById(R.id.descriptImsge);
+            imageView.setImageResource(R.drawable.stopref);
+            descimageView.setImageResource(R.drawable.stopdesc);
             builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                 }

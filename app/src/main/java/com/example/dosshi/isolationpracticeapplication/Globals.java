@@ -29,6 +29,10 @@ public class Globals extends Application {
     ArrayList<String> watchTimestamp = new ArrayList<>();
     ArrayList<String> watchrealData= new ArrayList<>();
     ArrayList<String> mobileRealdata = new ArrayList<>();
+    ArrayList<Float> mobilegyroX = new ArrayList<>();
+    ArrayList<Float> mobilegyroZ = new ArrayList<>();
+    ArrayList<Float> watchgyroX = new ArrayList<>();
+    ArrayList<Float> watchgyroZ = new ArrayList<>();
     HistoryData historyAccData = new HistoryData();
 
 
@@ -66,6 +70,10 @@ public class Globals extends Application {
         watchTimestamp.clear();
         mobileTimestamp.clear();
         historyAccData.clear();
+        mobilegyroX.clear();
+        mobilegyroZ.clear();
+        watchgyroX.clear();
+        watchgyroZ.clear();
 
 
         mobileTimestamp.add("0");
@@ -73,6 +81,11 @@ public class Globals extends Application {
         mobileX.add("0");
         mobileY.add("0");
         mobileZ.add("0");
+        mobilegyroX.add(0f);
+        mobilegyroZ.add(0f);
+        watchgyroX.add(0f);
+        watchgyroX.add(0f);
+
         watchX.add((float)0);
         watchY.add((float)0);
         watchZ.add((float)0);
@@ -107,6 +120,9 @@ public class Globals extends Application {
         watchY.add(highPassFilter(watcholdAccel_Y,y));
         watchZ.add(highPassFilter(watcholdAccel_Z,z));
         watchrealData.add(data[4]);
+        String[] missdata = data[4].split(",");
+        watchgyroX.add(Float.parseFloat(missdata[0]));
+        watchgyroZ.add(Float.parseFloat(missdata[2]));
     }
 
     public void mobileAccelDataSet(float x, float y, float z,long stamp){
@@ -120,10 +136,6 @@ public class Globals extends Application {
         mobileTimestamp.add(String.valueOf(stamp));
     }
 
-    public float noiseClear(float noise){
-        //if(Math.abs(noise) < 0.024)noise = 0;
-        return noise;
-    }
 
     //加速度の最大値、最小値を求める関数
     public float maxValue(){

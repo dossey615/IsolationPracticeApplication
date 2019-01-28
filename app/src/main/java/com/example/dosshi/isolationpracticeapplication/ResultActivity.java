@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -35,6 +36,12 @@ public class ResultActivity extends AppCompatActivity {
     private StorageReference storageRef;
     private String fileName;
     private GoogleApiClient mGoogleApiClient;
+    private int countmob = 0;
+    private int countwat = 0;
+    private int skip = 0;
+    private int skip2 = 0;
+    private float mobtime = 0f;
+    private float wattime = 0f;
 
     private String date;
 
@@ -60,8 +67,9 @@ public class ResultActivity extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
 
-//        SaveToSDcard();
+
         FileOutput();
+        missMoveSet();
 
         //それぞれのボタンを押した時の設定
         title.setOnClickListener(new View.OnClickListener() {
@@ -160,9 +168,54 @@ public class ResultActivity extends AppCompatActivity {
         RefCSV.child("Date").setValue(date);
 
     }
+    //間違えた時間，回数のカウント
+    public void missMoveSet(){
+        TextView moveTime = findViewById(R.id.movetime);
+        TextView moveCount = findViewById(R.id.movecount);
+        TextView stopTime = findViewById(R.id.stoptime);
+        TextView stopCount = findViewById(R.id.stopcount);
+        for(int i = 1; i < 1000; i++ ){
+            float watGyroX = globals.watchgyroX.get(i);
+            float watGyroZ = globals.watchgyroZ.get(i);
+            float mobGyroX = globals.mobilegyroX.get(i);
+            float mobGyroZ = globals.mobilegyroZ.get(i);
+            float oldwatGyroX = globals.watchgyroX.get(i-1);
+            float oldwatGyroZ = globals.watchgyroZ.get(i-1);
+            float oldmobGyroX = globals.mobilegyroX.get(i-1);
+            float oldmobGyroZ = globals.mobilegyroZ.get(i-1);
+            check(watGyroZ,oldwatGyroZ,1, i);
+            check(mobGyroZ,oldmobGyroZ,0, i);
+            moveCount.setText("可動部："+ countwat + "回");
+            stopCount.setText("軸部　："+ countmob + "回");
+            moveTime.setText("可動部："+ wattime * 0.01 + "秒");
+            stopTime.setText("軸部　："+ mobtime * 0.01 + "秒");
 
-    public void SaveToSDcard(){
+//            if (event.values[0] >= 1 || event.values[2] >= 0.5|| event.values[0] <= -1.0 || event.values[2] <= -0.7)
+//                if ( >= 0.2 || gyroZ >= 0.23|| gyroX <= -0.2 || gyroZ <= -0.2)
+        }
 
+    }
+    public  void check(float a, float b, int c,int i){
+        switch(c) {
+            case 0:
+                if (a >= 0.23 || a <= -0.2) {
+                    mobtime++;
+                    if (b < 0.23 && b > -0.2 && (i - skip >= 50 || skip == 0)) {
+                        countmob++;
+                        skip = i;
+                    }
+                }
+                break;
+            case 1:
+                if (a >= 0.5 || a <= -0.7) {
+                    wattime++;
+                    if (b < 0.5 && b > -0.7&&(i - skip2 >= 50 || skip2 == 0)) {
+                        countwat++;
+                        skip2 = i;
+                    }
+                }
+                break;
+        }
     }
 
     @Override

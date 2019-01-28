@@ -1,6 +1,7 @@
 package com.example.dosshi.isolationpracticeapplication;
 
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -27,6 +28,7 @@ public class MainResearchActivity extends AppCompatActivity {
         // スプラッシュthemeを通常themeに変更する
         setTheme(R.style.AppTheme);
         setContentView(R.layout.activity_main_reaearch);
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
         Button sendButton = findViewById(R.id.start);
         Button test = findViewById(R.id.help);
         globals = (Globals) this.getApplication();
@@ -44,7 +46,8 @@ public class MainResearchActivity extends AppCompatActivity {
 
         test.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
+                Intent intent = new Intent(getApplication(), PDFActivity.class);
+                startActivity(intent);
             }
         });
     }

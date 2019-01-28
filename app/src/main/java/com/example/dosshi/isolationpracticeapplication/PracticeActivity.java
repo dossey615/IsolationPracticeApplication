@@ -198,14 +198,16 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
                         gyroX = event.values[0];
                         gyroY = event.values[1];
                         gyroZ = event.values[2];
-                        if (gyroX >= 0.2 || gyroZ >= 0.23|| gyroX <= -0.2 || gyroZ <= -0.2) vibrator.vibrate(1000);
-                        else vibrator.cancel();
+                        //gyroX >= 0.2 ||gyroX <= -0.2
+                        if (gyroZ >= 0.23||gyroZ <= -0.2) vibrator.vibrate(1000);
                         String gyroTmp = "ジャイロセンサー\n"
                                 + " X: " + gyroX + "\n"
                                 + " Y: " + gyroY + "\n"
                                 + " Z: " + gyroZ;
                         gyroText.setText(gyroTmp);
                         String s = gyroX + "," + gyroY + "," + gyroZ;
+                        globals.mobilegyroX.add(gyroX);
+                        globals.mobilegyroZ.add(gyroZ);
                         globals.mobileRealdata.add(s);
                     }
                     count2++;
