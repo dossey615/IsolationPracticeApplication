@@ -3,6 +3,8 @@ package com.example.dosshi.isolationpracticeapplication;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -51,6 +53,9 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
     private int count2 = 0;
     private int moveflag = 0;
     private ProgressDialog progressDialog;
+    private View con;
+    private ColorDrawable colorDrawable;
+    private int temporaryColorInt;
 
 
     private SimpleDateFormat timeFormat =
@@ -73,6 +78,10 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
         prTimeText = findViewById(R.id.timeView);
         accelText = findViewById(R.id.accel);
         gyroText = findViewById(R.id.gyroscope);
+        con = findViewById(R.id.backview);
+
+
+
 
         //プログレスダイアログのセット
         progressDialog = new ProgressDialog(this);
@@ -122,8 +131,8 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
             // Listenerの登録
             accel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
             gyro = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
-            sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_FASTEST);
-            sensorManager.registerListener(this, gyro, SensorManager.SENSOR_DELAY_FASTEST);
+            sensorManager.registerListener(this, accel, 10000);
+            sensorManager.registerListener(this, gyro, 10000);
 
     }
 
@@ -177,7 +186,7 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
         if(flag == 1){
             switch (event.sensor.getType()){
                     case Sensor.TYPE_ACCELEROMETER:
-                        if(count % 2 == 0) {
+                        if(count % 1 == 0) {
                             sensorX = event.values[0];
                             sensorY = event.values[1];
                             sensorZ = event.values[2];
@@ -194,12 +203,17 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
                         count++;
                     break;
                 case Sensor.TYPE_GYROSCOPE:
-                    if(count2 % 2 == 0) {
+                    if(count2 % 1 == 0) {
                         gyroX = event.values[0];
                         gyroY = event.values[1];
                         gyroZ = event.values[2];
                         //gyroX >= 0.2 ||gyroX <= -0.2
-                        if (gyroZ >= 0.23||gyroZ <= -0.2) vibrator.vibrate(1000);
+                        if (gyroZ >= 0.23||gyroZ <= -0.2){
+                            vibrator.vibrate(1000);
+                            con.setBackgroundColor(Color.RED);
+                        }else{
+                            con.setBackgroundColor(Color.GREEN);
+                        }
                         String gyroTmp = "ジャイロセンサー\n"
                                 + " X: " + gyroX + "\n"
                                 + " Y: " + gyroY + "\n"
@@ -209,6 +223,7 @@ public class PracticeActivity extends AppCompatActivity implements SensorEventLi
                         globals.mobilegyroX.add(gyroX);
                         globals.mobilegyroZ.add(gyroZ);
                         globals.mobileRealdata.add(s);
+                    }else{
                     }
                     count2++;
                     break;

@@ -174,7 +174,8 @@ public class ResultActivity extends AppCompatActivity {
         TextView moveCount = findViewById(R.id.movecount);
         TextView stopTime = findViewById(R.id.stoptime);
         TextView stopCount = findViewById(R.id.stopcount);
-        for(int i = 1; i < 1000; i++ ){
+        int size = globals.compasionSize();
+        for(int i = 1; i < size - 1; i++ ){
             float watGyroX = globals.watchgyroX.get(i);
             float watGyroZ = globals.watchgyroZ.get(i);
             float mobGyroX = globals.mobilegyroX.get(i);

@@ -76,8 +76,8 @@ public class DescriptionActivity extends WearableActivity implements SensorEvent
         //センサマネージャに TYPE_ACCELEROMETER(加速度センサ) を指定します。
         accel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         gyro = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
-        sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_NORMAL);
-        sensorManager.registerListener(this, gyro, SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(this, accel, 10000);
+        sensorManager.registerListener(this, gyro, 10000);
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
         //GoogleApiClientインスタンス生成
@@ -200,7 +200,12 @@ public class DescriptionActivity extends WearableActivity implements SensorEvent
                     if (count2 <= 1001) {
                         acceltext.setText(event.values[0]+"\n"+ event.values[1]+"\n"+event.values[2]);
                         WatchDataSet2.add(event.values[0]+ "," + event.values[1] + "," + event.values[2]);
-                        if (event.values[2] >= 0.7 || event.values[2] <= -0.8) vibrator.vibrate(100);
+                        if (event.values[2] >= 0.7 || event.values[2] <= -0.8){
+                            vibrator.vibrate(100);
+                            con.setBackgroundColor(Color.RED);
+                        }else{
+                            con.setBackgroundColor(Color.GREEN);
+                        }
                         count2++;
                     }
                     break;

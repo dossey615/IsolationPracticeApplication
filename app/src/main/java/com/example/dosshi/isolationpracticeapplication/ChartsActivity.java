@@ -124,8 +124,8 @@ public class ChartsActivity extends AppCompatActivity {
         // Y軸最大最小設定
         leftAxis.getLabelPosition();
 
-        leftAxis.setAxisMaximum(globals.maxValue() + 5f);
-        leftAxis.setAxisMinimum(globals.minValue() - 5f);
+        leftAxis.setAxisMaximum(globals.maxValue() + 2f);
+        leftAxis.setAxisMinimum(globals.minValue() - 2f);
         // Grid横軸を破線
         leftAxis.enableGridDashedLine(10f, 10f, 0f);
         leftAxis.setDrawZeroLine(false);
@@ -242,7 +242,7 @@ public class ChartsActivity extends AppCompatActivity {
             dataSets.add(setCharts(set2,Color.RED)); // add the datasets
 //            dataSets.add(setCharts(set3,Color.GREEN)); // add the datasets
 //            dataSets.add(setCharts(set4,Color.MAGENTA)); // add the datasets
-            dataSets.add(setCharts(set5,Color.BLUE)); // add the datasets
+            dataSets.add(setCharts(set5,0x4D0000FF)); // add the datasets
 //            dataSets.add(setCharts(set6,Color.LTGRAY)); //
 
             // create a data object with the datasets
